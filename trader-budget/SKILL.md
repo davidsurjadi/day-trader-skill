@@ -61,6 +61,13 @@ If `trader/config.json` does not exist, copy `config.example.json` into
   **min_reward_risk** (1.0), **require_stop** (true), **no_entries_before** / **no_entries_after**
   ("09:45" / "15:30") and **flat_by** ("15:55"), all New York time.
 - **blocked**: tickers they never want to trade.
+- Costs, from their broker's fee page and their own fills, never guessed:
+  **commission_per_order_usd** (each order, each side), **commission_per_share_usd**
+  (each share, each side) and **slippage_per_share** (how much worse than the price a
+  market or stop fill lands). All 0 by default. A stop-out pays two commissions and
+  slips twice; a target fill is a limit order and slips once. The max loss and
+  reward:risk include them, so costs can shrink the size or refuse the trade. If
+  they are left at 0, say every time that the numbers assume free, perfect fills.
 - Keep **paper** true until they have watched it work on a paper account.
 
 ## Step 2: size the trade

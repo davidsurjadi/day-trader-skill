@@ -199,8 +199,12 @@ def max_loss(order):
     if not stop or not q:
         return None, stop
     plan = order.get("plan") or {}
-    if str(order.get("type", "market")) == "limit" and _f(order.get("limit_price")):
-        entry = _f(order["limit_price"])
+    limit = _f(order.get("limit_price")) if str(order.get("type", "market")) == "limit" else None
+    if _f(plan.get("max_loss")) is not None and (not limit or abs(limit - (_f(plan.get("entry")) or 0)) < 0.005):
+        # trader-budget's figure, sized at this entry: it includes any commission and slippage
+        return round(_f(plan["max_loss"]), 2), stop
+    if limit:
+        entry = limit
     elif _f(plan.get("max_loss")) is not None:
         return round(_f(plan["max_loss"]), 2), stop
     else:

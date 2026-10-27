@@ -39,11 +39,18 @@ What blocks an entry (on top):
   daily limit   max_orders_per_day orders placed today
   stop          no stop while "require_stop": true (a bracket stop_loss_stop_price
                 or the order's plan stop); a stop on the wrong side of the entry
-  loss          qty x (entry - stop) over max_loss_per_trade_usd. The entry is
+  loss          qty x (entry - stop), plus the costs at the stop, over
+                max_loss_per_trade_usd. The entry is
                 the limit price for a limit order, else the HIGHER of the plan's
                 entry and a fresh price (under 15 minutes old), so a stale plan
                 cannot understate the risk
-  reward:risk   (target - entry) / (entry - stop) under min_reward_risk
+  reward:risk   (target - entry) / (entry - stop) under min_reward_risk; after
+                costs when any cost is set
+  costs         commission_per_order_usd (each order, each side),
+                commission_per_share_usd (each share, each side) and
+                slippage_per_share (each market or stop fill), all 0 by default:
+                a stop-out pays two commissions and slips twice, a target fill
+                (a limit order) slips once
   daily loss    the max losses at the stops of today's entries plus this one
                 over max_daily_loss_usd (win or lose, each counts in full)
   trades        max_trades_per_day entries already placed today
@@ -73,8 +80,10 @@ DEFAULTS = {
     "max_orders_per_day": 10, "min_reward_risk": 1.0, "require_stop": True,
     "no_entries_before": "09:45", "no_entries_after": "15:30", "flat_by": "15:55",
     "paper": True, "blocked": [], "allow_options": False, "allow_margin": False, "allow_short": False,
-    "pdt_guard": False,
+    "pdt_guard": False, "commission_per_order_usd": 0, "commission_per_share_usd": 0,
+    "slippage_per_share": 0,
 }
+COST_KEYS = ("commission_per_order_usd", "commission_per_share_usd", "slippage_per_share")
 ALPACA_FIELDS = ("symbol", "side", "qty", "notional", "type", "time_in_force", "limit_price",
                  "stop_price", "trail_price", "trail_percent", "extended_hours", "client_order_id",
                  "order_class", "take_profit_limit_price", "stop_loss_stop_price",
@@ -282,6 +291,26 @@ def _f(x):
         return None
 
 
+def costs_of(cfg):
+    """The three cost keys as floats (0 when missing). Negative costs are refused."""
+    out = {}
+    for k in COST_KEYS:
+        raw = (cfg or {}).get(k)
+        v = 0.0 if raw in (None, "") else _f(raw)
+        if v is None or v < 0:
+            raise RiskError("%s must be zero or more, not %r" % (k, raw))
+        out[k] = v
+    return out
+
+
+def trade_costs(co, qty):
+    """(at the stop, at the target) in dollars for qty shares: commissions both sides,
+    slippage twice at the stop (a market entry and a stop exit), once at the target."""
+    comm = 2 * co["commission_per_order_usd"] + 2 * co["commission_per_share_usd"] * qty
+    return (round(comm + 2 * co["slippage_per_share"] * qty, 2),
+            round(comm + co["slippage_per_share"] * qty, 2))
+
+
 def money(x):
     return "$" + "{:,.2f}".format(float(x)).replace(".00", "")
 
@@ -382,6 +411,8 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
     now_et = to_eastern(now_utc)
     today = today or now_et.date().isoformat()
     acct, top_warn = account(c, portfolio, prices)
+    co = costs_of(c)
+    has_costs = any(co.values())
     blocked = {str(b).upper() for b in c.get("blocked") or []}
     done_today = placed_today(state, today)
     count_today = len(done_today)
@@ -594,11 +625,14 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
                     risk_c = int(round(abs(ref - stop) * 100))
                     risk_ps = risk_c / 100.0
                     shares = q if q is not None else ((value or 0) / ref)
-                    max_loss = round(shares * risk_ps, 2)
+                    cost_stop, cost_target = trade_costs(co, shares)
+                    max_loss = round(shares * risk_ps + cost_stop, 2)
                     cap = _f(c.get("max_loss_per_trade_usd"))
                     if cap and max_loss > cap + CENT:
-                        later.append("loss: %s shares x %s risk a share = %s at the stop, over your %s max loss "
-                                     "per trade" % (_num(shares), _p(risk_ps), money(max_loss), money(cap)))
+                        later.append("loss: %s shares x %s risk a share%s = %s at the stop, over your %s max "
+                                     "loss per trade" % (_num(shares), _p(risk_ps),
+                                                         (" + %s costs" % money(cost_stop)) if cost_stop else "",
+                                                         money(max_loss), money(cap)))
                     min_rr = _f(c.get("min_reward_risk"))
                     if target:
                         if (long and target <= ref + CENT) or (not long and target >= ref - CENT):
@@ -606,9 +640,12 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
                                          % (_p(target), "above" if long else "below", _p(ref)))
                         else:
                             rr = round(int(round(abs(target - ref) * 100)) / float(risk_c), 2)
+                            if has_costs and max_loss:
+                                rr = round((shares * abs(target - ref) - cost_target) / max_loss, 2)
                             if min_rr and rr < min_rr - 1e-9:
-                                later.append("reward:risk: %.2f (target %s, entry %s, stop %s) is under your "
-                                             "minimum %s" % (rr, _p(target), _p(ref), _p(stop), _num(min_rr)))
+                                later.append("reward:risk: %.2f%s (target %s, entry %s, stop %s) is under your "
+                                             "minimum %s" % (rr, " after costs" if has_costs else "", _p(target),
+                                                             _p(ref), _p(stop), _num(min_rr)))
                     elif min_rr:
                         later.append("reward:risk: no target to measure it against (min_reward_risk %s)"
                                      % _num(min_rr))
@@ -699,6 +736,7 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
         "pass": sum(1 for r in results if r["verdict"] == "PASS"),
         "block": sum(1 for r in results if r["verdict"] == "BLOCK"),
         "warnings": top_warn,
+        "costs": co,
         "cash_after": round(acct["cash"], 2),
         "today": {"orders_placed": count_today, "entries_placed": len(entries_today),
                   "loss_at_risk": round(loss_today, 2), "day_trades_5d": pdt_n if c.get("pdt_guard") else None},
@@ -734,6 +772,8 @@ def report(res):
     lines.append("%d passed, %d blocked at %s New York. Cash after the passed orders: %s (%s account)."
                  % (res["pass"], res["block"], res["now_new_york"], money(res["cash_after"]),
                     "paper" if res["paper"] else "LIVE"))
+    if not any((res.get("costs") or {}).values()):
+        lines.append("Costs: none set in trader/config.json, so the max losses assume free, perfect fills.")
     if res["block"]:
         lines.append("Blocked orders do not go to the broker. Fix the order or your rules, then check again.")
     else:

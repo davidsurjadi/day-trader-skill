@@ -16,7 +16,8 @@ checks the order and trader-broker asks you yes or no.
 How many shares. Whole shares only: Alpaca takes no fractions in a bracket.
 
     shares = floor of the smallest of
-      max loss       max_loss_per_trade_usd / risk per share (entry minus stop)
+      max loss       (max_loss_per_trade_usd minus the fixed costs) / (risk per
+                     share (entry minus stop) plus the costs a share at the stop)
       position cap   budget x max_position_pct / entry
       max order      max_order_usd / entry
       cash           (budget minus the cash buffer) / entry
@@ -28,6 +29,14 @@ minutes old) and higher, because a price that ran up since the plan means a
 bigger loss at the same stop. Zero shares (the stop is too far away for your
 max loss) is a plain refusal: no order is written. So is a reward:risk under
 min_reward_risk (the price ran toward the target since the plan).
+
+Costs. Three optional keys in trader/config.json, all 0 by default:
+commission_per_order_usd (each order, each side), commission_per_share_usd
+(each share, each side) and slippage_per_share (how much worse than the
+price each market or stop fill lands). A stopped-out trade pays two
+commissions and slips twice (in and out); a target fill is a limit order, so
+it slips once (the entry). The max loss and reward:risk include them. With
+no costs set the report says so: real fills are never free.
 
 Weights mode (kept from v1, no longer the headline): split a budget across a
 list of stocks by weight.
@@ -82,7 +91,11 @@ DEFAULTS = {
     "allow_margin": False,
     "allow_short": False,
     "pdt_guard": False,
+    "commission_per_order_usd": 0,
+    "commission_per_share_usd": 0,
+    "slippage_per_share": 0,
 }
+COST_KEYS = ("commission_per_order_usd", "commission_per_share_usd", "slippage_per_share")
 EPS = 1e-9
 FRESH_MINUTES = 15
 SETUP_WORDS = {"orb": "opening-range breakout", "flag": "flag", "bounce": "oversold bounce"}
@@ -302,6 +315,25 @@ def money(x):
 
 # ---------------------------------------------------------------- plan mode (the default)
 
+def costs_of(cfg):
+    """The three cost keys as floats (0 when missing). Negative costs are refused."""
+    out = {}
+    for k in COST_KEYS:
+        v = _f((cfg or {}).get(k)) if (cfg or {}).get(k) not in (None, "") else 0.0
+        if v is None or v < 0:
+            raise SizeError("%s must be zero or more, not %r" % (k, (cfg or {}).get(k)))
+        out[k] = v
+    return out
+
+
+def trade_costs(co, qty):
+    """(at the stop, at the target) in dollars for qty shares: commissions both sides,
+    slippage twice at the stop (a market entry and a stop exit), once at the target."""
+    comm = 2 * co["commission_per_order_usd"] + 2 * co["commission_per_share_usd"] * qty
+    return (round(comm + 2 * co["slippage_per_share"] * qty, 2),
+            round(comm + co["slippage_per_share"] * qty, 2))
+
+
 def size_trade(plan, cfg, budget=None, limit=None, price=None, cash=None, today=None):
     """Pure function: one plan + your rules -> the sizing (a dict). qty may be 0.
 
@@ -363,11 +395,22 @@ def size_trade(plan, cfg, budget=None, limit=None, price=None, cash=None, today=
         cash_note = "cash %s in trader/portfolio.json minus the %s buffer" % (money(cash), money(cash_buffer))
     available = max(round(available, 2), 0.0)
 
+    co = costs_of(c)
+    has_costs = any(co.values())
+    fixed = 2 * co["commission_per_order_usd"]
+    per_stop = risk + 2 * (co["commission_per_share_usd"] + co["slippage_per_share"])
     limits = []
     max_loss = _f(c.get("max_loss_per_trade_usd"))
     if max_loss:
-        limits.append({"name": "max loss", "usd": max_loss, "per": risk, "shares": shares_for(max_loss, risk),
-                       "how": "%s max loss / %s risk a share" % (money(max_loss), _price(risk))})
+        if has_costs:
+            limits.append({"name": "max loss", "usd": max_loss, "per": per_stop,
+                           "shares": shares_for(max_loss - fixed, per_stop),
+                           "how": "(%s max loss - %s commissions) / %s risk + costs a share"
+                                  % (money(max_loss), money(fixed), _price(per_stop))})
+        else:
+            limits.append({"name": "max loss", "usd": max_loss, "per": risk,
+                           "shares": shares_for(max_loss, risk),
+                           "how": "%s max loss / %s risk a share" % (money(max_loss), _price(risk))})
     cap_pct = _f(c.get("max_position_pct"))
     if cap_pct:
         cap = round(budget * cap_pct / 100.0, 2)
@@ -385,20 +428,32 @@ def size_trade(plan, cfg, budget=None, limit=None, price=None, cash=None, today=
     for l in limits:
         l["binds"] = l["name"] == bound[0]
     cost = round(qty * ref, 2)
-    loss = round(qty * risk_c / 100.0, 2)
+    cost_stop, cost_target = trade_costs(co, qty)
+    loss_before = round(qty * risk_c / 100.0, 2)
+    loss = round(loss_before + cost_stop, 2)
+    rr_net = None
+    if qty > 0 and loss > 0:
+        rr_net = round((qty * reward_c / 100.0 - cost_target) / loss, 2)
+    rr_check = rr_net if (has_costs and rr_net is not None) else reward_c / float(risk_c)
     refusal = None
     if qty == 0:
-        if bound[0] == "max loss":
+        if bound[0] == "max loss" and has_costs:
+            refusal = ("one share risks %s (entry %s minus stop %s) plus %s in costs, more than your %s max "
+                       "loss per trade. No order. Skip this trade, or plan a closer stop with trader-exit."
+                       % (money(risk), _price(ref), _price(stop), money(fixed + per_stop - risk),
+                          money(max_loss)))
+        elif bound[0] == "max loss":
             refusal = ("one share risks %s (entry %s minus stop %s), more than your %s max loss per trade. "
                        "No order. Skip this trade, or plan a closer stop with trader-exit."
                        % (money(risk), _price(ref), _price(stop), money(max_loss)))
         else:
             refusal = ("one share of %s costs %s, more than your %s limit (%s). No order."
                        % (sym, money(ref), bound[0], limits[[l["name"] for l in limits].index(bound[0])]["how"]))
-    elif _f(c.get("min_reward_risk")) and reward_c < _f(c["min_reward_risk"]) * risk_c - EPS:
-        refusal = ("reward:risk %.2f (target %s, entry %s, stop %s) is under your minimum %s, so trader-risk "
+    elif _f(c.get("min_reward_risk")) and rr_check < _f(c["min_reward_risk"]) - EPS:
+        refusal = ("reward:risk %.2f%s (target %s, entry %s, stop %s) is under your minimum %s, so trader-risk "
                    "would block it. No order. Skip it, or make a new plan with trader-exit."
-                   % (reward_c / float(risk_c), _price(target), _price(ref), _price(stop), _num(c["min_reward_risk"])))
+                   % (rr_check, " after costs" if has_costs else "", _price(target), _price(ref), _price(stop),
+                      _num(c["min_reward_risk"])))
     elif cost < float(c.get("min_order_usd") or 0) - 0.005:
         refusal = ("%d share%s of %s is %s, under your %s minimum order. No order."
                    % (qty, "" if qty == 1 else "s", sym, money(cost), money(c["min_order_usd"])))
@@ -410,7 +465,9 @@ def size_trade(plan, cfg, budget=None, limit=None, price=None, cash=None, today=
         "stop_label": plan.get("stop_label", ""), "target_label": plan.get("target_label", ""),
         "budget": budget, "cash_buffer_pct": buf_pct, "cash_buffer": cash_buffer, "cash_available": available,
         "max_loss_per_trade_usd": max_loss, "limits": limits, "qty": qty, "bound_by": bound[0],
-        "cost": cost, "max_loss": loss, "flat_by": plan.get("flat_by") or c.get("flat_by"),
+        "cost": cost, "max_loss": loss, "max_loss_before_costs": loss_before, "costs": co,
+        "costs_at_stop": cost_stop, "costs_at_target": cost_target, "reward_risk_net": rr_net,
+        "flat_by": plan.get("flat_by") or c.get("flat_by"),
         "order_type": "limit" if limit is not None else "market", "refusal": refusal,
     }
 
@@ -428,7 +485,9 @@ def bracket_order(s):
            % (setup, s["symbol"], s["qty"], {"max loss": "%s max loss per trade" % money(s["max_loss_per_trade_usd"] or 0),
                                              "position cap": "position cap", "max order": "max order",
                                              "cash": "cash after the buffer"}[s["bound_by"]],
-              s["qty"], _price(s["risk_per_share"]), money(s["max_loss"])))
+              s["qty"], _price(s["risk_per_share"]), money(s["max_loss_before_costs"])))
+    if s["costs_at_stop"]:
+        why += ", %s with costs" % money(s["max_loss"])
     o.update({
         "order_class": "bracket",
         "take_profit_limit_price": _price(s["target"]),
@@ -466,9 +525,19 @@ def plan_report(s, order, notes=()):
         lines.append("No order: " + s["refusal"])
         lines.append("Education and tooling, not financial advice.")
         return "\n".join(lines)
-    lines.append("Size: %d shares of %s = %s at %s. Max loss at the stop: %d x %s = %s."
-                 % (s["qty"], s["symbol"], money(s["cost"]), _price(s["entry"]), s["qty"],
-                    _price(s["risk_per_share"]), money(s["max_loss"])))
+    if any(s["costs"].values()):
+        lines.append("Size: %d shares of %s = %s at %s. Max loss at the stop: %d x %s = %s, plus %s in "
+                     "costs = %s." % (s["qty"], s["symbol"], money(s["cost"]), _price(s["entry"]), s["qty"],
+                                      _price(s["risk_per_share"]), money(s["max_loss_before_costs"]),
+                                      money(s["costs_at_stop"]), money(s["max_loss"])))
+        lines.append("Reward:risk %.2f before costs, %.2f after (%s in costs if the target fills)."
+                     % (s["reward_risk"], s["reward_risk_net"], money(s["costs_at_target"])))
+    else:
+        lines.append("Size: %d shares of %s = %s at %s. Max loss at the stop: %d x %s = %s."
+                     % (s["qty"], s["symbol"], money(s["cost"]), _price(s["entry"]), s["qty"],
+                        _price(s["risk_per_share"]), money(s["max_loss"])))
+        lines.append("Costs: none set in trader/config.json, so these numbers assume free, perfect fills. "
+                     "Set commission_per_order_usd, commission_per_share_usd and slippage_per_share.")
     lines.append("A stop is an order, not a promise: in a fast market it can fill below %s." % _price(s["stop"]))
     lines.append("")
     lines.append("Proposed bracket order (place_stock_order arguments, nothing has been placed):")

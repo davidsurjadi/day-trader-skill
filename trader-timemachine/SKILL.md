@@ -48,6 +48,7 @@ bars), `--offline FILE` (a saved Yahoo chart JSON, `.json` or `.json.gz`),
 | file | what |
 | --- | --- |
 | `trader/plan.json` | the plan from trader-exit: symbol, date, entry, entry_time / entry_bar, stop, stop_rule, target, target_r, opening range |
+| `trader/config.json` | optional: `slippage_per_share` and `commission_per_share_usd` for average R after costs |
 | Yahoo chart API | one request: 60 days of 5-minute bars (`range=60d&interval=5m`), free and unofficial, can lag |
 | `trader/timemachine.json` | with `--write`: `{plan, mc, history}` plus the verdict. `mc` holds the odds, percentiles, the fan-chart bands, 160 sample paths and a 24-bin histogram of the close |
 
@@ -84,6 +85,15 @@ bars), `--offline FILE` (a saved Yahoo chart JSON, `.json` or `.json.gz`),
    replays hit neither (the price at `--until` decides those), and the
    average R when its sign goes against the lean. Those can only point the
    other way because of the replays that hit neither.
+
+**Costs.** With `slippage_per_share` or `commission_per_share_usd` set in
+`trader/config.json`, it also prints average R after costs, for the replays
+and for the history. Costs never change the odds, only what each outcome is
+worth: a target fill slips once (the entry), a stop or a market exit at
+`--until` slips twice, and both sides pay commission. The per-order
+commission is left out because the size is not known yet; trader-budget
+counts it. With no costs set it says so: average R then assumes free,
+perfect fills, which flatters every plan.
 
 **The seed.** The draws come from Python's `random.Random(seed)`, seed 19 by
 default. Same plan, same data, same seed: the same numbers, on any machine.
