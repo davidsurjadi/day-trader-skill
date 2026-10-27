@@ -1,0 +1,28 @@
+{
+  "_note": "EXAMPLE ONLY. Copy to trader/instruments.json and replace every value with your broker's own contract specification and costs. point_value = account money per 1.0 move in the price per 1 unit of qty (1 share, 1 lot, 1 contract). cost_per_trade = commission both sides + spread + any overnight financing, for one round trip of 1 unit. The zeros below are placeholders, not real costs.",
+  "instruments": {
+    "TSLA": {
+      "asset_class": "us_stock",
+      "point_value": 1,
+      "cost_per_trade": 0
+    },
+    "US500": {
+      "asset_class": "index_cfd",
+      "point_value": 1,
+      "cost_per_trade": 0,
+      "_check": "index CFD point value varies by broker and contract size"
+    },
+    "XAUUSD": {
+      "asset_class": "gold",
+      "point_value": 100,
+      "cost_per_trade": 0,
+      "_check": "100 assumes 1 lot = 100 oz; confirm your broker's lot size"
+    },
+    "EURUSD": {
+      "asset_class": "fx",
+      "point_value": 100000,
+      "cost_per_trade": 0,
+      "_check": "100000 assumes 1 standard lot, in USD; convert if your account currency differs"
+    }
+  }
+}
