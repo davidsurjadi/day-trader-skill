@@ -1,0 +1,209 @@
+{
+  "_note": "EXAMPLE. Copy to trader/instruments.json and replace every contract number and cost with your broker's own instrument details. point_value = account-currency money per 1.0 move in the price per 1 unit of qty, before conversion from the quote currency. cost_per_trade = commission both sides + spread + financing for one round trip of 1 unit, in the account currency. Zero costs and placeholder sizes are NOT real values.",
+  "account_currency": "USD",
+  "instruments": {
+    "TSLA": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "SPCX": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "NVDA": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "SMCI": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "MSFT": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "GOOGL": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "AMZN": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "MU": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "AMD": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "META": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "AVGO": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "PLTR": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "DELL": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "MRVL": {
+      "asset_class": "us_stock",
+      "quote_currency": "USD",
+      "session": "us_stock",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0
+    },
+    "US500": {
+      "description": "S&P 500 index CFD",
+      "asset_class": "index_cfd",
+      "quote_currency": "USD",
+      "session": "cme_globex",
+      "point_value": 1,
+      "min_qty": 0.01,
+      "qty_step": 0.01,
+      "cost_per_trade": 0,
+      "_check": "placeholder: confirm contract size, minimum and step in Saxo's instrument details"
+    },
+    "NAS100": {
+      "description": "Nasdaq 100 index CFD",
+      "asset_class": "index_cfd",
+      "quote_currency": "USD",
+      "session": "cme_globex",
+      "point_value": 1,
+      "min_qty": 0.01,
+      "qty_step": 0.01,
+      "cost_per_trade": 0,
+      "_check": "placeholder: confirm contract size, minimum and step in Saxo's instrument details"
+    },
+    "US30": {
+      "description": "Dow Jones 30 index CFD",
+      "asset_class": "index_cfd",
+      "quote_currency": "USD",
+      "session": "cme_globex",
+      "point_value": 1,
+      "min_qty": 0.01,
+      "qty_step": 0.01,
+      "cost_per_trade": 0,
+      "_check": "placeholder: confirm contract size, minimum and step in Saxo's instrument details"
+    },
+    "XAUUSD": {
+      "description": "spot gold, qty in troy ounces",
+      "asset_class": "gold",
+      "quote_currency": "USD",
+      "session": "cme_globex",
+      "point_value": 1,
+      "min_qty": 1,
+      "qty_step": 1,
+      "cost_per_trade": 0,
+      "_check": "placeholder: Saxo's docs quote XAUUSD amounts in ounces; confirm minimum, step and trading hours"
+    },
+    "EURUSD": {
+      "description": "spot FX, qty in units of the first currency",
+      "asset_class": "fx",
+      "quote_currency": "USD",
+      "session": "fx_24x5",
+      "point_value": 1,
+      "min_qty": 1000,
+      "qty_step": 1000,
+      "cost_per_trade": 0,
+      "_check": "placeholder: confirm Saxo's minimum and step; the cost is per 1 unit, so it is tiny"
+    },
+    "GBPUSD": {
+      "description": "spot FX, qty in units of the first currency",
+      "asset_class": "fx",
+      "quote_currency": "USD",
+      "session": "fx_24x5",
+      "point_value": 1,
+      "min_qty": 1000,
+      "qty_step": 1000,
+      "cost_per_trade": 0,
+      "_check": "placeholder: confirm Saxo's minimum and step; the cost is per 1 unit, so it is tiny"
+    },
+    "USDJPY": {
+      "description": "spot FX, qty in units of the first currency",
+      "asset_class": "fx",
+      "quote_currency": "JPY",
+      "session": "fx_24x5",
+      "point_value": 1,
+      "min_qty": 1000,
+      "qty_step": 1000,
+      "cost_per_trade": 0,
+      "_check": "placeholder: confirm Saxo's minimum and step; the cost is per 1 unit, so it is tiny"
+    }
+  }
+}

@@ -79,8 +79,10 @@ def load_journal(path):
 
 
 def load_instruments(path):
+    """{SYM: spec}, each spec carrying the file's account currency as "_account"."""
     doc = read_json(path, "instruments", required=False) or {}
-    return {k.upper(): v for k, v in (doc.get("instruments") or {}).items()}
+    acct = str(doc.get("account_currency") or "USD").upper()
+    return {k.upper(): dict(v, _account=acct) for k, v in (doc.get("instruments") or {}).items()}
 
 
 def _f(x):
@@ -101,7 +103,7 @@ def _date(text, what):
 
 def make_trade(symbol, setup, side, entry, stop, exit_price, qty, date, costs=None, target=None,
                point_value=None, asset_class=None, account="paper", instruments=None, note=None,
-               source="manual", fills=None):
+               source="manual", fills=None, fx=None):
     """A closed trade, measured in money and in R. Refuses what cannot be measured."""
     sym = str(symbol or "").strip().upper()
     if not sym:
@@ -120,6 +122,13 @@ def make_trade(symbol, setup, side, entry, stop, exit_price, qty, date, costs=No
     pv = _f(point_value) if point_value is not None else _f(spec.get("point_value", 1))
     if pv is None or pv <= 0:
         raise JournalError("%s: point_value must be positive (money per 1.0 price move per 1 unit)" % sym)
+    quote, acct = str(spec.get("quote_currency") or "").upper(), spec.get("_account")
+    if quote and acct and quote != acct:
+        fx = _f(fx)
+        if not fx or fx <= 0:
+            raise JournalError("%s is quoted in %s and the account is in %s: pass --fx, the %s you got for "
+                               "1 %s when the trade closed" % (sym, quote, acct, acct, quote))
+        pv *= fx
     c = _f(costs) if costs is not None else _f(spec.get("cost_per_trade", 0))
     if c is None or c < 0:
         raise JournalError("%s: costs must be zero or more, in account money" % sym)
@@ -351,7 +360,7 @@ def cmd_add(a):
     t = make_trade(a.symbol, a.setup, a.side, a.entry, a.stop, a.exit, a.qty,
                    a.date or datetime.date.today().isoformat(), costs=a.costs, target=a.target,
                    point_value=a.point_value, asset_class=a.asset_class, account=a.account,
-                   instruments=load_instruments(a.instruments), note=a.note)
+                   instruments=load_instruments(a.instruments), note=a.note, fx=a.fx)
     added = add_trades(journal, [t])
     if not added:
         print("Already in the journal: %s" % describe(t))
@@ -421,6 +430,7 @@ def build_parser():
     q.add_argument("--costs", help="commission + spread + financing, in account money")
     q.add_argument("--point-value", help="money per 1.0 price move per 1 unit; default from instruments, else 1")
     q.add_argument("--asset-class")
+    q.add_argument("--fx", help="account money per 1 unit of the quote currency (USDJPY in a USD account)")
     q.add_argument("--account", default="paper", help="paper, demo or live")
     q.add_argument("--date")
     q.add_argument("--note")

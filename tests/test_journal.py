@@ -43,10 +43,18 @@ class OneTrade(unittest.TestCase):
 
     def test_point_value_from_the_instruments_file(self):
         inst = journal.load_instruments(INSTRUMENTS)
-        t = trade(symbol="XAUUSD", entry=2400.0, stop=2395.0, exit_price=2410.0, qty=0.1, instruments=inst)
-        self.assertEqual(t["point_value"], 100)
+        t = trade(symbol="XAUUSD", entry=2400.0, stop=2395.0, exit_price=2410.0, qty=10, instruments=inst)
+        self.assertEqual(t["point_value"], 1)
         self.assertEqual(t["asset_class"], "gold")
         self.assertEqual((t["risk"], t["gross"], t["r_gross"]), (50.0, 100.0, 2.0))
+
+    def test_a_yen_quoted_pair_needs_the_rate(self):
+        inst = journal.load_instruments(INSTRUMENTS)
+        with self.assertRaises(journal.JournalError):
+            trade(symbol="USDJPY", entry=152.40, stop=152.10, exit_price=153.00, qty=10000, instruments=inst)
+        t = trade(symbol="USDJPY", entry=152.40, stop=152.10, exit_price=153.00, qty=10000, instruments=inst,
+                  fx=1 / 153.00)
+        self.assertEqual((t["risk"], t["gross"], t["r_gross"]), (19.61, 39.22, 2.0))
 
     def test_a_trade_without_a_real_stop_has_no_r(self):
         for bad in (dict(stop=364.18), dict(stop=370.0), dict(side="short", stop=358.0)):
