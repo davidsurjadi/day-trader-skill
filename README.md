@@ -181,7 +181,14 @@ reality check, never as a promise.
 
 **A stop is a plan, not a guarantee.** In a fast market or across a gap, a
 stop order can fill well past its price. The max loss shown is the loss at
-the stop price.
+the stop price, plus the commission and slippage you set in
+`trader/config.json`.
+
+**Costs are yours to set.** `commission_per_order_usd`,
+`commission_per_share_usd` and `slippage_per_share` are 0 in the example
+config. Fill them in from your broker's fee page and your own fills. At 0,
+sizing, the risk check and the Time Machine assume free, perfect fills, and
+they say so.
 
 **The data is free and unofficial.** Yahoo Finance's chart endpoint is not an
 official API: it can lag, change or rate-limit you. The scanner and the entry

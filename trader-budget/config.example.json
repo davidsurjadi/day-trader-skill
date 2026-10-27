@@ -21,5 +21,8 @@
   "allow_margin": false,
   "allow_short": false,
   "pdt_guard": false,
+  "commission_per_order_usd": 0,
+  "commission_per_share_usd": 0,
+  "slippage_per_share": 0,
   "sec_user_agent": "Your Name you@example.com"
 }

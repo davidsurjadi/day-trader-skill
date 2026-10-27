@@ -69,8 +69,8 @@ batch that is fine order by order but breaks a limit together is caught.
 | position | (entries) the stock would be over `max_position_pct` of the account |
 | cash | (entries) the buy would leave less than the cash buffer, or need margin |
 | stop | (entries) no stop while `require_stop` is true (a bracket `stop_loss_stop_price`, or the order's plan stop); a stop on the wrong side of the entry |
-| loss | (entries) qty x (entry minus stop) over `max_loss_per_trade_usd` |
-| reward:risk | (entries) (target minus entry) / (entry minus stop) under `min_reward_risk` |
+| loss | (entries) qty x (entry minus stop), plus the costs at the stop, over `max_loss_per_trade_usd` |
+| reward:risk | (entries) (target minus entry) / (entry minus stop) under `min_reward_risk`; after costs when any cost is set |
 | daily loss | (entries) the max losses at the stops of today's entries, plus this one, over `max_daily_loss_usd` |
 | trades | (entries) `max_trades_per_day` entries already placed today |
 | window | (entries) before `no_entries_before` or after `no_entries_after`, or the market is closed |
@@ -85,6 +85,11 @@ How the numbers work:
   `trader/prices.json` (under 15 minutes old). A plan written at 10:15 cannot
   understate the risk at 10:55 after the price ran up. An older price is not
   used, and it says so.
+- **Costs** come from `commission_per_order_usd`, `commission_per_share_usd`
+  and `slippage_per_share` in `trader/config.json` (all 0 by default, the
+  same keys trader-budget sizes with). A stop-out pays two commissions and
+  slips twice; a target fill slips once. With no costs set the report says
+  the max losses assume free, perfect fills: say that to the user.
 - **Daily loss** counts the full max loss of every entry placed today, win or
   lose, as trader-broker logged it. Three full-size trades use up a $150 day.
 - **The window** is New York time, worked out in the tool (daylight saving

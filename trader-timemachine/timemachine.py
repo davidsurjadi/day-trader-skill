@@ -108,6 +108,47 @@ class TMError(Exception):
     pass
 
 
+COST_KEYS = ("commission_per_order_usd", "commission_per_share_usd", "slippage_per_share")
+
+
+def costs_of(cfg):
+    """The three cost keys from trader/config.json as floats (0 when missing)."""
+    out = {}
+    for k in COST_KEYS:
+        raw = (cfg or {}).get(k)
+        try:
+            v = 0.0 if raw in (None, "") else float(raw)
+        except (TypeError, ValueError):
+            v = None
+        if v is None or v < 0:
+            raise TMError("%s in the config must be zero or more, not %r" % (k, raw))
+        out[k] = v
+    return out
+
+
+def cost_r(co, outcome, risk):
+    """Per-share costs of one outcome in R: commission both sides, slippage on the
+    market entry and on a stop or market exit; a target is a limit fill and does not slip."""
+    slip = co["slippage_per_share"] * (1 if outcome == "target" else 2)
+    return (slip + 2 * co["commission_per_share_usd"]) / risk
+
+
+def apply_costs(mc, history, entry, stop, co):
+    """Add average R after per-share costs to the replays and the history. The fixed
+    per-order commission is left out: the size is not known until trader-budget."""
+    risk = abs(entry - stop)
+    if risk <= 0 or not (co["slippage_per_share"] or co["commission_per_share_usd"]):
+        return
+    pt = mc["p_target"]
+    mc["avg_R_net"] = round(mc["avg_R"] - pt * cost_r(co, "target", risk)
+                            - (1 - pt) * cost_r(co, "stop", risk), 3)
+    trades = history.get("trades") or []
+    for x in trades:
+        x["R_net"] = round(x["R"] - cost_r(co, x["outcome"], abs(x["entry"] - x["stop"])), 2)
+    if trades:
+        history["avg_R_net"] = round(statistics.mean(x["R_net"] for x in trades), 3)
+
+
 # ---------------------------------------------------------------- time (copied from trader-alerts)
 
 def _nth_sunday(year, month, n):
@@ -676,7 +717,7 @@ def verdict_notes(mc):
     return notes
 
 
-def time_machine(text, plan, now_utc, replays=10000, seed=19, window=2, until=None, source="yahoo"):
+def time_machine(text, plan, now_utc, replays=10000, seed=19, window=2, until=None, source="yahoo", costs=None):
     """Chart JSON text + a normalized plan -> the timemachine.json document."""
     if not 1 <= replays <= 1000000:
         raise TMError("--replays must be between 1 and 1,000,000")
@@ -734,6 +775,8 @@ def time_machine(text, plan, now_utc, replays=10000, seed=19, window=2, until=No
         history = {"sessions": len(sessions), "triggered": 0, "rule": None, "trades": [],
                    "note": "skipped: the history replay knows the opening-range breakout (orb) only, "
                            "this plan's setup is %r" % plan["setup"]}
+    co = costs_of(costs)
+    apply_costs(mc, history, plan["entry"], plan["stop"], co)
     last_bar = bars[-1]
     return {
         "created_by": "trader-timemachine",
@@ -745,6 +788,7 @@ def time_machine(text, plan, now_utc, replays=10000, seed=19, window=2, until=No
         "plan": plan_out,
         "mc": mc,
         "history": history,
+        "costs": co,
         "verdict": verdict(mc),
         "verdict_notes": verdict_notes(mc),
         "warnings": warn,
@@ -784,8 +828,15 @@ def report(doc):
         % (until, m["median_close"], m["p5_close"], m["p95_close"]),
         "  Average R: %+.3f (R = the %.2f risk: %sR at the target, -1R at the stop)."
         % (m["avg_R"], p["risk_per_share"], ("+%g" % m["r_at_target"]), ),
-        "",
     ]
+    co = doc.get("costs") or {}
+    if "avg_R_net" in m:
+        lines.append("  After costs: %+.3f (slippage %.2f and commission %.2f a share each way; the per-order "
+                     "commission is left out until trader-budget knows the size)."
+                     % (m["avg_R_net"], co.get("slippage_per_share", 0), co.get("commission_per_share_usd", 0)))
+    else:
+        lines.append("  Costs: none a share set in trader/config.json, so average R assumes free, perfect fills.")
+    lines.append("")
     if h.get("rule"):
         ru = h["rule"]
         stop_words = {"or_mid": "opening-range midpoint", "or_low": "opening-range low",
@@ -795,7 +846,8 @@ def report(doc):
             lines.append("History: the same rule (%d-min opening range, stop at the %s, %gR target) on each of "
                          "those %d real sessions fired %d times: %d target, %d stop, %d neither. Average R %+.3f."
                          % (ru["or_minutes"], stop_words, ru["target_r"], h["sessions"], h["triggered"],
-                            h["target"], h["stop"], h["close"], h["avg_R"]))
+                            h["target"], h["stop"], h["close"], h["avg_R"])
+                         + (" After costs %+.3f." % h["avg_R_net"] if "avg_R_net" in h else ""))
         else:
             lines.append("History: the same rule never fired in those %d sessions." % h["sessions"])
     else:
@@ -874,7 +926,14 @@ def compute(a):
         text, source = read_offline(a.offline, plan["symbol"]), "offline"
     else:
         text, source = fetch_chart(plan["symbol"]), "yahoo"
-    return time_machine(text, plan, now, a.replays, a.seed, a.window, a.until, source)
+    cfg = None
+    if a.config and os.path.exists(a.config):
+        try:
+            with open(a.config, encoding="utf-8") as fh:
+                cfg = json.load(fh)
+        except json.JSONDecodeError as e:
+            raise TMError("%s is not valid JSON: %s" % (a.config, e))
+    return time_machine(text, plan, now, a.replays, a.seed, a.window, a.until, source, cfg)
 
 
 def cmd_run(a):
@@ -915,6 +974,7 @@ def main(argv=None):
 
     def common(p):
         p.add_argument("--plan", default="trader/plan.json", help="the plan from trader-exit")
+        p.add_argument("--config", default="trader/config.json", help="costs: slippage and commission a share")
         p.add_argument("--symbol", help="or give the plan as flags: ticker")
         p.add_argument("--side", default="buy", choices=["buy", "sell"])
         p.add_argument("--date", help="the plan's day, YYYY-MM-DD (default today, New York)")
