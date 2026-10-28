@@ -1,0 +1,60 @@
+{
+ "capital_usd": 10000.0,
+ "date": "2026-10-28",
+ "placed": true,
+ "plans": {
+  "NAS100": {
+   "amount": 1.0,
+   "entry": 29797.57,
+   "margin_usd": 740.59,
+   "or_high": 29797.56,
+   "or_low": 29706.18,
+   "order_id": "5041319841",
+   "related_ids": [
+    "5041319842",
+    "5041319843"
+   ],
+   "risk_usd": 45.71,
+   "stop": 29751.86,
+   "symbol": "USNAS100.I",
+   "target": 29888.99,
+   "uic": 4912
+  },
+  "US30": {
+   "amount": 0.6,
+   "entry": 52496.11,
+   "or_high": 52496.1,
+   "or_low": 52339.1,
+   "risk_usd": 47.11,
+   "skip": "Saxo's precheck refused it: {\"ErrorCode\": \"PriceNotInTickSizeIncrements\", \"Message\": \"The order price is not in tick size increments. Please see Trading Conditions for more information.\"}",
+   "stop": 52417.6,
+   "symbol": "US30.I",
+   "target": 52653.13,
+   "uic": 4911
+  },
+  "US500": {
+   "amount": 7.3,
+   "entry": 7742.74,
+   "margin_usd": 1408.89,
+   "or_high": 7742.73,
+   "or_low": 7729.13,
+   "order_id": "5041319836",
+   "related_ids": [
+    "5041319837",
+    "5041319838"
+   ],
+   "risk_usd": 49.71,
+   "stop": 7735.93,
+   "symbol": "US500.I",
+   "target": 7756.36,
+   "uic": 4913
+  }
+ },
+ "risk_usd": 50.0,
+ "rule": {
+  "flat": "15:55",
+  "name": "orb15-mid-2R-saxo-stop",
+  "or_minutes": 15,
+  "target_r": 2.0
+ }
+}
