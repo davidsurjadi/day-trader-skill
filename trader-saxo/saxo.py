@@ -24,6 +24,7 @@ file and every request is a GET.
     python3 saxo.py link US500 --uic <Uic from find> --asset-type CfdOnIndex --write
     python3 saxo.py quote US500 NVDA --write
     python3 saxo.py bars US500 --horizon 5 --count 1200 --out trader/charts/US500-5m.json
+    python3 saxo.py bars US500 --horizon 5 --days 60 --out trader/charts/US500-60d5m.json
 
 The base URL is Saxo's simulation gateway. There is no live switch in this
 version on purpose: live access comes after the demo has shown the setup
@@ -274,6 +275,35 @@ def bars(c, uic, asset_type, horizon=5, count=1200):
     return c.get("/chart/v3/charts", {"Uic": uic, "AssetType": asset_type, "Horizon": horizon, "Count": count})
 
 
+def bars_back(c, uic, asset_type, horizon=5, days=60, max_pages=60):
+    """Bars covering the last `days` calendar days: the newest 1,200, then pages of
+    1,200 ending just before the oldest bar so far (Mode=UpTo, Time), oldest first."""
+    if horizon not in CHART_HORIZONS:
+        raise SaxoError("--horizon must be one of %s minutes" % ", ".join(map(str, CHART_HORIZONS)))
+    if not 1 <= days <= 400:
+        raise SaxoError("--days must be 1 to 400")
+    first = c.get("/chart/v3/charts", {"Uic": uic, "AssetType": asset_type, "Horizon": horizon, "Count": 1200})
+    rows = [r for r in first.get("Data", []) if r.get("Time")]
+    if not rows:
+        return first
+    cutoff = _epoch(rows[-1]["Time"]) - days * 86400
+    seen = {r["Time"] for r in rows}
+    for _ in range(max_pages):
+        oldest = min(_epoch(r["Time"]) for r in rows)
+        if oldest <= cutoff:
+            break
+        before = (datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=oldest - 1)).strftime("%Y-%m-%dT%H:%M:%SZ")
+        page = c.get("/chart/v3/charts", {"Uic": uic, "AssetType": asset_type, "Horizon": horizon, "Count": 1200,
+                                          "Mode": "UpTo", "Time": before})
+        new = [r for r in page.get("Data", []) if r.get("Time") and r["Time"] not in seen]
+        if not new:
+            break
+        rows.extend(new)
+        seen.update(r["Time"] for r in new)
+    rows = sorted((r for r in rows if _epoch(r["Time"]) > cutoff), key=lambda r: _epoch(r["Time"]))
+    return dict(first, Data=rows)
+
+
 def to_yahoo(sym, chart, horizon):
     """Saxo chart v3 -> a Yahoo v8 chart JSON, so the pack's offline readers take it."""
     ts, o, h, l, cl, v = [], [], [], [], [], []
@@ -333,6 +363,7 @@ def main(argv=None, client=None, now=None):
     p.add_argument("symbol")
     p.add_argument("--horizon", type=int, default=5)
     p.add_argument("--count", type=int, default=1200)
+    p.add_argument("--days", type=int, help="page back to cover this many calendar days (overrides --count)")
     p.add_argument("--out", help="save as a Yahoo-style chart JSON")
     for q in sub.choices.values():
         q.add_argument("--json", action="store_true")
@@ -387,7 +418,7 @@ def main(argv=None, client=None, now=None):
         else:
             doc = read_json(a.instruments, {}) or {}
             uic, at = linked(doc, a.symbol)
-            chart = bars(c, uic, at, a.horizon, a.count)
+            chart = bars_back(c, uic, at, a.horizon, a.days) if a.days else bars(c, uic, at, a.horizon, a.count)
             res = to_yahoo(a.symbol, chart, a.horizon)
             r0 = res["chart"]["result"][0]
             text = "%s: %d bars of %d minutes, delayed %s minutes." % (
