@@ -101,6 +101,28 @@ usually has a cost or fill problem.
 4. If costs take a large share of the gross profit, say so first. Cutting
    costs or trading a wider target is a decision for the user.
 
+## Paper forward test (US500)
+
+`paper.py` applies ONE fixed rule to one New York session and logs the result
+as a paper trade (`account: paper`, setup `orb15-mid-2R`). The rule is written
+in the file so it cannot drift: 15-minute opening range, entry on the first
+5-minute close above the range high, stop at the range midpoint, target 2R,
+stop first when one bar touches both, flat by 15:55. It reads Yahoo's ^GSPC
+5-minute bars by default (Saxo's US500.I tracks the same index; its price
+level can differ a little) or any saved Yahoo-style chart, and charges a
+round-trip cost in points (default 0.6, Saxo Classic's US500.I spread).
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/paper.py" run --date 2026-10-28              # log yesterday's session
+python3 "${CLAUDE_SKILL_DIR}/paper.py" run --date 2026-10-28 --dry-run    # show only
+python3 "${CLAUDE_SKILL_DIR}/journal.py" stats --account paper            # the forward record
+```
+
+It logs qty 1 at point value 1, so R is exact whatever the contract size.
+Never backfill past sessions into the forward record: it starts on the day the
+trial starts. Read it with the verdict rules above; do not change the rule
+mid-trial.
+
 ## Rules
 
 - Never invent a trade, a fill, a stop or a cost. If a number is missing, ask.

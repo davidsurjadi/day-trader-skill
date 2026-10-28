@@ -150,6 +150,7 @@ python3 trader-scanner/scan.py daily --watchlist trader-scanner/watchlist.exampl
 SAXO_TOKEN=... python3 trader-saxo/saxo.py balance                   # Saxo demo account, read-only
 python3 trader-journal/journal.py import --setup orb                    # broker fills -> trader/journal.json
 python3 trader-journal/journal.py stats                                # win rate, R after costs, verdict
+python3 trader-journal/paper.py run --date 2026-10-28                  # US500 paper forward test, one session
 ```
 
 ```bash
@@ -226,7 +227,7 @@ trader-broker/      SKILL.md, ticket.py, claude_desktop_config.example.json
 trader-alerts/      SKILL.md, alerts.py, alerts.example.json
 trader-analyst/     SKILL.md, facts.py, metrics.example.json
 trader-pelosi/      SKILL.md, ptr.py
-trader-journal/     SKILL.md, journal.py, instruments.example.json
+trader-journal/     SKILL.md, journal.py, paper.py, instruments.example.json
 trader-markets/     SKILL.md, markets.py, instruments.example.json
 trader-saxo/        SKILL.md, saxo.py
 tests/              unittest suite + offline fixtures
