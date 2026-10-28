@@ -221,6 +221,30 @@ class Link(unittest.TestCase):
             with self.assertRaises(sx.SaxoError):
                 sx.bars_back(c, 1, "Stock", days=bad)
 
+    def test_bars_back_keeps_what_it_has_at_saxos_history_limit(self):
+        newest = [{"Time": "2026-10-27T13:30:00Z", "Close": 1}, {"Time": "2026-10-27T13:35:00Z", "Close": 2}]
+
+        class Limit(Gateway):
+            def __call__(self, req, timeout=None):
+                self.calls.append(req)
+                if "Mode=UpTo" in req.full_url:
+                    body = (b'{"ErrorCode":"InvalidModelState","Message":"Requested time range is not supported. '
+                            b'Minute based data is only available for the last 6 months."}')
+                    raise urllib.error.HTTPError(req.full_url, 400, "x", {}, io.BytesIO(body))
+                return Resp(json.dumps({"Data": newest}).encode())
+
+        c = sx.Client(token="t", opener=Limit(), pause=0)
+        self.assertEqual(len(sx.bars_back(c, 1, "CfdOnIndex", days=400)["Data"]), 2)
+
+        class Broken(Limit):
+            def __call__(self, req, timeout=None):
+                if "Mode=UpTo" in req.full_url:
+                    raise urllib.error.HTTPError(req.full_url, 500, "x", {}, io.BytesIO(b"{}"))
+                return super().__call__(req, timeout)
+
+        with self.assertRaises(sx.SaxoError):                  # any other error still stops the run
+            sx.bars_back(sx.Client(token="t", opener=Broken(), pause=0), 1, "CfdOnIndex", days=400)
+
     def test_chart_limits(self):
         c, _ = client()
         for kw in ({"horizon": 7}, {"count": 1201}, {"count": 0}):
