@@ -43,7 +43,7 @@ class SectorCap(unittest.TestCase):
     def test_the_example_config_carries_the_ai_list(self):
         c = cfg()
         self.assertEqual(c["max_open_per_sector"], 2)
-        self.assertEqual(len(c["sectors"]["ai_tech"]), 14)
+        self.assertEqual(len(c["sectors"]["ai_tech"]), 18)
 
     def test_a_third_ai_stock_is_blocked(self):
         v, why = run([bracket("TSLA")], portfolio=holding("NVDA", "AMD"))

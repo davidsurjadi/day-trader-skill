@@ -196,11 +196,11 @@ class DayTradeChecks(unittest.TestCase):
         self.assertEqual((r["entry_ref"], r["max_loss"], r["verdict"]), (364.0, 45.44, "PASS"))
 
     def test_daily_loss_and_trades_per_day(self):
-        two = {"orders": [placed("AAPL"), placed("AMD")]}
+        two = {"orders": [placed("JPM"), placed("AMD")]}
         res = check.check([tsla()], cfg(), state=two, now=at(NOW))
         self.assertEqual(verdicts(res), ["PASS"])
         self.assertIn("today before this: 2 of 3 trades, $93.76 of $150 daily loss", res["results"][0]["info"][-1])
-        three = {"orders": [placed("AAPL"), placed("AMD"), placed("NVDA")]}
+        three = {"orders": [placed("JPM"), placed("AMD"), placed("NVDA")]}
         res = check.check([tsla()], cfg(), state=three, now=at(NOW))
         why = reasons(res)
         self.assertIn("trades: 3 entries placed today", why)

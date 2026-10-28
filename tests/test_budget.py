@@ -26,8 +26,8 @@ CONTRACT_CFG = {
     "fractional": False, "broker": "alpaca", "paper": True, "blocked": [],
     "allow_options": False, "allow_margin": False, "allow_short": False, "pdt_guard": False,
     "commission_per_order_usd": 0, "commission_per_share_usd": 0, "slippage_per_share": 0,
-    "sectors": {"ai_tech": ["TSLA", "SPCX", "NVDA", "SMCI", "MSFT", "GOOGL", "AMZN", "MU", "AMD", "META", "AVGO",
-                            "PLTR", "DELL", "MRVL"]},
+    "sectors": {"ai_tech": ["MU", "NVDA", "TSLA", "SNDK", "MSFT", "AAPL", "AMD", "AMZN", "INTC", "GOOGL", "META",
+                            "AVGO", "GOOG", "MRVL", "PLTR", "TSM", "LITE", "ORCL"]},
     "max_open_per_sector": 2,
     "sec_user_agent": "Your Name you@example.com",
 }

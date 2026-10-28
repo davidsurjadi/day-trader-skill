@@ -127,9 +127,13 @@ python3 "${CLAUDE_SKILL_DIR}/paper.py" stocks --date 2026-10-28 \
     --watchlist ../trader-scanner/watchlist.example.txt --journal trader/stocks-journal.json
 ```
 
-Judge the stocks as ONE pooled record, never ticker by ticker: picking the
-ticker that happens to look good afterwards is cherry-picking, and with 14
-tickers one will look good by chance.
+Judge each watchlist as ONE pooled record, never ticker by ticker: picking the
+ticker that happens to look good afterwards is cherry-picking, and with 18
+tickers one will look good by chance. Keep one journal per watchlist (the AI
+list, `watchlist-diversifiers.txt`, `watchlist-broad.txt`) so a result in one
+basket cannot hide behind another. Stocks in one basket move together, so a
+pooled interval looks narrower than the evidence really is: check that the
+result also holds session by session, not only trade by trade.
 
 The US500 run logs qty 1 at point value 1, so R is exact whatever the contract size.
 Never backfill past sessions into the forward record: it starts on the day the

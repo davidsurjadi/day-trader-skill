@@ -1,0 +1,10 @@
+# Liquid US stocks outside the AI trade, screened 28 Oct 2026 on 20-day average
+# dollar volume (over USD 1bn), daily range (2.5% or more), correlation of daily
+# returns with the AI watchlist (0.35 or less) and whole-share fit inside a USD 3,750
+# position. Chosen without looking at how any rule did on them. Not a recommendation.
+COIN
+SHOP
+NFLX
+UNH
+BA
+NKE
