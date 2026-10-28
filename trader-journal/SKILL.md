@@ -118,7 +118,20 @@ python3 "${CLAUDE_SKILL_DIR}/paper.py" run --date 2026-10-28 --dry-run    # show
 python3 "${CLAUDE_SKILL_DIR}/journal.py" stats --account paper            # the forward record
 ```
 
-It logs qty 1 at point value 1, so R is exact whatever the contract size.
+For the stocks, the same rule runs on every ticker in a watchlist, sized and
+charged like a real trade (whole shares inside the max loss and the position
+cap; Saxo SG Classic commission of 0.08 %, minimum USD 1, a side, plus 9 % GST):
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/paper.py" stocks --date 2026-10-28 \
+    --watchlist ../trader-scanner/watchlist.example.txt --journal trader/stocks-journal.json
+```
+
+Judge the stocks as ONE pooled record, never ticker by ticker: picking the
+ticker that happens to look good afterwards is cherry-picking, and with 14
+tickers one will look good by chance.
+
+The US500 run logs qty 1 at point value 1, so R is exact whatever the contract size.
 Never backfill past sessions into the forward record: it starts on the day the
 trial starts. Read it with the verdict rules above; do not change the rule
 mid-trial.

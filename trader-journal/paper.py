@@ -17,10 +17,20 @@ looked good last week:
     python3 paper.py run --date 2026-10-28                     # Yahoo ^GSPC, logs US500 to trader/journal.json
     python3 paper.py run --date 2026-10-28 --chart saved.json  # a saved Yahoo-style chart (e.g. saxo.py bars --out)
     python3 paper.py run --date 2026-10-28 --dry-run           # show, do not log
+    python3 paper.py stocks --date 2026-10-28 --watchlist ../trader-scanner/watchlist.example.txt \
+        --journal trader/stocks-journal.json                   # the same rule on each stock, sized and charged
 
 One trade is logged per session at most, as qty 1 and point value 1, so its R is
 exact whatever the contract size; --cost is the round trip in price points (the
 US500.I spread). A session with no breakout logs nothing and says so.
+
+Stocks (the stocks command) use the same rule, sized and charged like a real
+trade: whole shares, as many as fit both the max loss at the stop (--max-loss,
+50) and the position cap (--position-cap, 3750); commission on each side of
+--commission-pct (0.08) of the value, at least --commission-min (USD 1), plus
+--tax-pct (9) on the commission. Those defaults are Saxo SG Classic for US
+shares and Singapore GST, as of 28 Oct 2026. A stock whose stop is too far
+for even one share inside the limits logs nothing and says so.
 """
 
 import argparse
@@ -29,6 +39,7 @@ import json
 import math
 import os
 import sys
+import time
 import urllib.error
 import urllib.request
 
@@ -141,31 +152,47 @@ def orb_trade(bars):
 
 # ---------------------------------------------------------------- command
 
-def run(a):
-    day = journal._date(a.date, "--date")
-    if a.chart:
-        with open(a.chart, encoding="utf-8") as fh:
-            text, source = fh.read(), "file:" + os.path.basename(a.chart)
-    else:
-        text, source = fetch_yahoo(a.source), "yahoo:" + a.source
+def stock_size(t, a):
+    """(whole shares, commission + tax for the round trip in USD), or (0, reason)."""
+    risk = t["entry"] - t["stop"]
+    qty = min(math.floor(a.max_loss / risk + 1e-9), math.floor(a.position_cap / t["entry"] + 1e-9))
+    if qty < 1:
+        return 0, ("no whole share fits: %.2f risk a share against the %.2f max loss, %.2f a share against the "
+                   "%.2f position cap" % (risk, a.max_loss, t["entry"], a.position_cap))
+    side = lambda price: max(a.commission_min, a.commission_pct / 100.0 * qty * price)
+    return qty, round((side(t["entry"]) + side(t["exit"])) * (1 + a.tax_pct / 100.0), 2)
+
+
+def log_session(a, symbol, text, source, day, stock):
+    """The rule on one symbol's session -> one printed line; logs it unless --dry-run. Returns 0."""
     bars = session_bars(text, day)
     if not bars:
         print("%s %s: no regular-session bars in the data (a holiday, a weekend, or not traded yet). Nothing logged."
-              % (a.symbol, day))
+              % (symbol, day))
         return 0
     t, why = orb_trade(bars)
     if t is None:
-        print("%s %s: no trade, %s. Nothing logged." % (a.symbol, day, why))
+        print("%s %s: no trade, %s. Nothing logged." % (symbol, day, why))
         return 0
-    rec = journal.make_trade(a.symbol, RULE["name"], "long", t["entry"], t["stop"], t["exit"], 1, day,
-                             costs=a.cost, target=t["target"], point_value=1, asset_class="index_cfd",
-                             account="paper", note="%s; entry %s, %s at %s; range %.2f-%.2f"
+    if stock:
+        qty, costs = stock_size(t, a)
+        if not qty:
+            print("%s %s: no trade, %s. Nothing logged." % (symbol, day, costs))
+            return 0
+        cost_words = "USD %.2f commission and tax on %d shares" % (costs, qty)
+    else:
+        qty, costs = 1, a.cost
+        cost_words = "the %.2f-point cost" % a.cost
+    rec = journal.make_trade(symbol, RULE["name"], "long", t["entry"], t["stop"], t["exit"], qty, day,
+                             costs=costs, target=t["target"], point_value=1,
+                             asset_class="us_stock" if stock else "index_cfd", account="paper",
+                             note="%s; entry %s, %s at %s; range %.2f-%.2f"
                              % (source, t["entry_bar"], t["outcome"], t["exit_bar"], t["or_low"], t["or_high"]),
                              source="paper.py")
     line = ("%s %s: entry %.2f at the %s bar close, stop %.2f, target %.2f -> %s at %s, exit %.2f: %+.2fR gross, "
-            "%+.2fR after the %.2f-point cost"
-            % (a.symbol, day, t["entry"], t["entry_bar"], t["stop"], t["target"], t["outcome"], t["exit_bar"],
-               t["exit"], rec["r_gross"], rec["r_net"], a.cost))
+            "%+.2fR after %s"
+            % (symbol, day, t["entry"], t["entry_bar"], t["stop"], t["target"], t["outcome"], t["exit_bar"],
+               t["exit"], rec["r_gross"], rec["r_net"], cost_words))
     if a.dry_run:
         print(line + " (dry run, not logged)")
         return 0
@@ -174,6 +201,53 @@ def run(a):
     if added:
         journal.write_json(a.journal, doc)
     print(line + (". Logged to %s." % a.journal if added else ". Already in %s." % a.journal))
+    return 0
+
+
+def run(a):
+    day = journal._date(a.date, "--date")
+    if a.chart:
+        with open(a.chart, encoding="utf-8") as fh:
+            text, source = fh.read(), "file:" + os.path.basename(a.chart)
+    else:
+        text, source = fetch_yahoo(a.source), "yahoo:" + a.source
+    return log_session(a, a.symbol.upper(), text, source, day, stock=False)
+
+
+def read_watchlist(path):
+    with open(path, encoding="utf-8") as fh:
+        return [ln.split("|")[0].strip().upper() for ln in fh
+                if ln.strip() and not ln.strip().startswith("#")]
+
+
+def stocks(a):
+    day = journal._date(a.date, "--date")
+    syms = read_watchlist(a.watchlist)
+    if not syms:
+        raise PaperError("no tickers in %s" % a.watchlist)
+    failed = []
+    for i, sym in enumerate(syms):
+        if a.chart_dir:
+            path = os.path.join(a.chart_dir, "%s.json" % sym)
+            if not os.path.exists(path):
+                print("%s %s: no chart file %s. Nothing logged." % (sym, day, path))
+                failed.append(sym)
+                continue
+            with open(path, encoding="utf-8") as fh:
+                text, source = fh.read(), "file:" + os.path.basename(path)
+        else:
+            if i:
+                time.sleep(a.pause)
+            try:
+                text, source = fetch_yahoo(sym), "yahoo:" + sym
+            except PaperError as e:
+                print("%s %s: %s. Nothing logged." % (sym, day, e))
+                failed.append(sym)
+                continue
+        log_session(a, sym, text, source, day, stock=True)
+    if failed:
+        print("No data for %d of %d: %s." % (len(failed), len(syms), ", ".join(failed)))
+        return 1
     return 0
 
 
@@ -188,9 +262,21 @@ def main(argv=None):
     p.add_argument("--cost", type=float, default=0.6, help="round-trip cost in price points (default 0.6)")
     p.add_argument("--journal", default="trader/journal.json")
     p.add_argument("--dry-run", action="store_true")
+    p = sub.add_parser("stocks", help="the same rule on every stock in a watchlist, sized and charged")
+    p.add_argument("--date", required=True, help="the New York session date, YYYY-MM-DD")
+    p.add_argument("--watchlist", required=True, help="a text file of tickers, one a line, # for comments")
+    p.add_argument("--chart-dir", help="read <TICKER>.json from this folder instead of fetching")
+    p.add_argument("--max-loss", type=float, default=50.0)
+    p.add_argument("--position-cap", type=float, default=3750.0)
+    p.add_argument("--commission-pct", type=float, default=0.08)
+    p.add_argument("--commission-min", type=float, default=1.0)
+    p.add_argument("--tax-pct", type=float, default=9.0)
+    p.add_argument("--pause", type=float, default=0.5, help="seconds between Yahoo requests")
+    p.add_argument("--journal", default="trader/stocks-journal.json")
+    p.add_argument("--dry-run", action="store_true")
     a = ap.parse_args(argv)
     try:
-        return run(a)
+        return run(a) if a.cmd == "run" else stocks(a)
     except (PaperError, journal.JournalError, OSError) as e:
         print("paper: %s" % e, file=sys.stderr)
         return 2
