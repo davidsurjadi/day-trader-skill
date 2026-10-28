@@ -293,8 +293,13 @@ def bars_back(c, uic, asset_type, horizon=5, days=60, max_pages=60):
         if oldest <= cutoff:
             break
         before = (datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=oldest - 1)).strftime("%Y-%m-%dT%H:%M:%SZ")
-        page = c.get("/chart/v3/charts", {"Uic": uic, "AssetType": asset_type, "Horizon": horizon, "Count": 1200,
-                                          "Mode": "UpTo", "Time": before})
+        try:
+            page = c.get("/chart/v3/charts", {"Uic": uic, "AssetType": asset_type, "Horizon": horizon,
+                                              "Count": 1200, "Mode": "UpTo", "Time": before})
+        except SaxoError as e:
+            if "time range is not supported" in str(e):     # Saxo keeps about 6 months of minute bars
+                break
+            raise
         new = [r for r in page.get("Data", []) if r.get("Time") and r["Time"] not in seen]
         if not new:
             break
