@@ -142,12 +142,13 @@ mid-trial.
 
 ## The whole flow, daily (paper)
 
-`flow.py` runs the pack's own flow once a day at 10:15 New York, on the 307
+`flow.py` runs the pack's own flow once a day at 09:50 New York (the first
+5-minute close after the opening range), on the 307
 watchlist stocks, and keeps it as a separate paper record (account
 `paper-flow`, setup `full-flow-orb`): scanner, news, entry, exit, time
 machine, budget (USD 10,000, USD 50 a trade) and risk, each the skill's own
 tool. David decided on 28 Oct 2026 that a ticket passing the risk check counts
-as approved, so the broker step is a paper fill at the 10:15 price; the alerts
+as approved, so the broker step is a paper fill at the 09:50 price; the alerts
 are read from the bars after the close (stop first when one bar touches both,
 flat at 15:55). News blocks only a halt or a share offering; the time
 machine never blocks, its averages are kept as tags. A ticket the cash limit
