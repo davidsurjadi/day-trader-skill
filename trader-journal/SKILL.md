@@ -140,6 +140,26 @@ Never backfill past sessions into the forward record: it starts on the day the
 trial starts. Read it with the verdict rules above; do not change the rule
 mid-trial.
 
+## The whole flow, daily (paper)
+
+`flow.py` runs the pack's own flow once a day at 10:15 New York, on the 307
+watchlist stocks, and keeps it as a separate paper record (account
+`paper-flow`, setup `full-flow-orb`): scanner, news, entry, exit, time
+machine, budget (USD 10,000, USD 50 a trade) and risk, each the skill's own
+tool. David decided on 28 Oct 2026 that a ticket passing the risk check counts
+as approved, so the broker step is a paper fill at the 10:15 price; the alerts
+are read from the bars after the close (stop first when one bar touches both,
+flat at 15:55). News blocks only a halt or a share offering; the time
+machine never blocks, its averages are kept as tags. A ticket the cash limit
+squeezes below half the max loss is skipped. Costs are Saxo SG Classic.
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/flow.py" morning --date 2026-10-29 --dir paper/flow \
+    --watchlist trader-scanner/watchlist.example.txt trader-scanner/watchlist-broad.txt \
+    --user-agent "Your Name you@example.com"
+python3 "${CLAUDE_SKILL_DIR}/flow.py" close --date 2026-10-29 --dir paper/flow --journal paper/flow-journal.json
+```
+
 ## Event days (tags, not filters)
 
 `events.py` tags each trial trade with the scheduled event of its session, so
