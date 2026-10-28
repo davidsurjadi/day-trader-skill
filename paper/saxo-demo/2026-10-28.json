@@ -1,6 +1,7 @@
 {
  "capital_usd": 10000.0,
  "date": "2026-10-28",
+ "flattened": true,
  "placed": true,
  "plans": {
   "NAS100": {
