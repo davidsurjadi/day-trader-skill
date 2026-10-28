@@ -213,7 +213,12 @@ def quote(c, uic, asset_type):
     q = d.get("Quote") or {}
     return {"bid": q.get("Bid"), "ask": q.get("Ask"), "mid": q.get("Mid"), "delay_minutes": q.get("DelayedByMinutes"),
             "price_type_bid": q.get("PriceTypeBid"), "price_type_ask": q.get("PriceTypeAsk"),
-            "time": d.get("LastUpdated"), "error": d.get("ErrorCode") or q.get("ErrorCode")}
+            "time": d.get("LastUpdated"), "error": _error(d.get("ErrorCode")) or _error(q.get("ErrorCode"))}
+
+
+def _error(code):
+    """Saxo sends ErrorCode "None" when there is no error."""
+    return None if code in (None, "", "None") else code
 
 
 def usable_price(q):

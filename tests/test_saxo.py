@@ -183,6 +183,19 @@ class Link(unittest.TestCase):
             self.assertIn(why, reason)
         self.assertEqual(sx.usable_price({"ask": 2.5, "price_type_ask": "Indicative"}), (2.5, None))
 
+    def test_error_code_none_means_no_error(self):
+        # seen on the real simulation gateway: a tradable XAUUSD quote carries ErrorCode "None"
+        fake = dict(FAKE)
+        fake["/trade/v1/infoprices"] = {"LastUpdated": "2026-10-28T07:15:00Z", "Quote": {
+            "Bid": 1.0, "Ask": 1.1, "DelayedByMinutes": 0, "ErrorCode": "None",
+            "PriceTypeBid": "Tradable", "PriceTypeAsk": "Tradable"}}
+        c, _ = client(fake=fake)
+        q = sx.quote(c, 1, "FxSpot")
+        self.assertIsNone(q["error"])
+        self.assertEqual(sx.usable_price(q), (1.1, None))
+        fake["/trade/v1/infoprices"]["Quote"]["ErrorCode"] = "NoValidInput"
+        self.assertEqual(sx.quote(c, 1, "FxSpot")["error"], "NoValidInput")
+
     def test_chart_limits(self):
         c, _ = client()
         for kw in ({"horizon": 7}, {"count": 1201}, {"count": 0}):
