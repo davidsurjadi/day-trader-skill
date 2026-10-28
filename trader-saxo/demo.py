@@ -54,9 +54,9 @@ except ImportError:  # the folder copied on its own: plan, place and flatten sti
     journal = None
 
 INDICES = {"US500": (4913, "US500.I"), "NAS100": (4912, "USNAS100.I"), "US30": (4911, "US30.I")}
+TICKS = {4913: 0.01, 4912: 0.01, 4911: 0.1}    # TickSize from Saxo's instrument details, 28 Oct 2026
 ASSET = "CfdOnIndex"
 RULE = {"name": "orb15-mid-2R-saxo-stop", "or_minutes": 15, "target_r": 2.0, "flat": "15:55"}
-TICK = 0.01            # TickSize of all three, from Saxo's instrument details
 AMOUNT_STEP = 0.1      # AmountDecimals 1
 NYSE_HOLIDAYS = {
     "2026-01-01": "New Year's Day",
@@ -155,14 +155,16 @@ def opening_range(chart, day):
     return hi, lo
 
 
-def plan_trade(high, low, risk_usd):
+def plan_trade(high, low, risk_usd, tick=0.01):
     """The orders the rule places for one index: a buy-stop one tick above the range high,
-    the stop at the range midpoint, the target at 2R, sized so the stop loses at most risk_usd."""
-    entry = round(math.ceil(round((high + TICK) / TICK, 6)) * TICK, 2)
-    stop = round(math.floor(round(((high + low) / 2) / TICK, 6)) * TICK, 2)
+    the stop at the range midpoint, the target at 2R, sized so the stop loses at most risk_usd.
+    Prices sit on the instrument's tick (Saxo refuses any other)."""
+    dp = max(0, -int(math.floor(math.log10(tick) + 1e-9)))
+    entry = round(math.ceil(round((high + tick) / tick, 6)) * tick, dp)
+    stop = round(math.floor(round(((high + low) / 2) / tick, 6)) * tick, dp)
     if entry - stop <= 0:
         raise DemoError("the opening range has no width")
-    target = round(entry + RULE["target_r"] * (entry - stop), 2)
+    target = round(math.floor(round((entry + RULE["target_r"] * (entry - stop)) / tick, 6)) * tick, dp)
     amount = math.floor(round(risk_usd / (entry - stop) / AMOUNT_STEP, 6)) * AMOUNT_STEP
     amount = round(amount, 1)
     return {"or_high": round(high, 2), "or_low": round(low, 2), "entry": entry, "stop": stop, "target": target,
@@ -265,7 +267,7 @@ def make_plans(c, day, risk):
             hi, lo = opening_range(c.get("/chart/v3/charts", {"Uic": uic, "AssetType": ASSET, "Horizon": 1,
                                                                "Count": 60, "Mode": "UpTo",
                                                                "Time": range_end_utc(day)}), day)
-            p = plan_trade(hi, lo, risk)
+            p = plan_trade(hi, lo, risk, TICKS[uic])
             if p["amount"] <= 0:
                 raise DemoError("the stop is too far for USD %s risk at the 0.1-contract minimum" % risk)
             plans[name] = dict(p, uic=uic, symbol=symbol)
