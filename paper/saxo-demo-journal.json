@@ -1,0 +1,50 @@
+{
+  "trades": [
+    {
+      "id": "51cb1312a451",
+      "date": "2026-10-28",
+      "symbol": "NAS100",
+      "setup": "orb15-mid-2R-saxo-stop",
+      "asset_class": "index_cfd",
+      "account": "saxo-demo",
+      "side": "long",
+      "qty": 1.0,
+      "entry": 29800.74,
+      "stop": 29751.86,
+      "exit": 29751.16,
+      "point_value": 1.0,
+      "risk": 48.88,
+      "gross": -49.58,
+      "costs": 0.0,
+      "net": -49.58,
+      "r_gross": -1.014,
+      "r_net": -1.014,
+      "source": "demo.py",
+      "target": 29888.99,
+      "note": "saxo-sim; planned entry 29797.57, filled 29800.74 (+3.17); stop 29751.86, target 29888.99; closed 29751.16; P/L EUR None"
+    },
+    {
+      "id": "00ca6af218a8",
+      "date": "2026-10-28",
+      "symbol": "US500",
+      "setup": "orb15-mid-2R-saxo-stop",
+      "asset_class": "index_cfd",
+      "account": "saxo-demo",
+      "side": "long",
+      "qty": 7.3,
+      "entry": 7746.47,
+      "stop": 7735.93,
+      "exit": 7735.77,
+      "point_value": 1.0,
+      "risk": 76.94,
+      "gross": -78.11,
+      "costs": 0.0,
+      "net": -78.11,
+      "r_gross": -1.015,
+      "r_net": -1.015,
+      "source": "demo.py",
+      "target": 7756.36,
+      "note": "saxo-sim; planned entry 7742.74, filled 7746.47 (+3.73); stop 7735.93, target 7756.36; closed 7735.77; P/L EUR None"
+    }
+  ]
+}
