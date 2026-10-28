@@ -24,6 +24,8 @@ first trial session) so the grouping cannot drift toward whatever looked good:
   stocks by rvol           rvol >= 1 "in play", below 1 "not in play"
   stocks by stop distance  under 0.5%, 0.5% to 1%, 1% or more
   stocks by theme          AI 18, other 289
+  by event day             earnings (stocks only), rate decision or CPI, none, unknown; added
+                           28 Oct 2026 before the first logged session (events.py)
 
 The Saxo cross-check runs the same rule on Saxo's own US500.I and USNAS100.I bars (read
 from the demo gateway, no orders) beside the Yahoo-based records, which stay the main
@@ -46,6 +48,7 @@ import sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import journal as J  # noqa: E402  (the same statistics journal.py prints)
+import events as E  # noqa: E402  (earnings, rate decision and CPI days)
 
 SGT = datetime.timezone(datetime.timedelta(hours=8), "SGT")   # Singapore keeps no summer time
 INDEX = [("us500", "US500", "us500-journal.json"), ("nas100", "NAS100", "nas100-journal.json")]
@@ -156,8 +159,16 @@ def main():
     p.add_argument("--sessions", required=True, help="the session log to read and update")
     p.add_argument("--date", help="the session just logged, YYYY-MM-DD; omit to rebuild only")
     p.add_argument("--note", default="", help="a short note for this session, e.g. symbols that failed")
+    p.add_argument("--events", help="the saved event days (default: <journals>/events)")
     p.add_argument("--out", required=True)
     a = p.parse_args()
+    ev_dir = a.events or os.path.join(a.journals, "events")
+    ev_docs = {}
+
+    def event(t):
+        if t["date"] not in ev_docs:
+            ev_docs[t["date"]] = E.load_day(ev_dir, t["date"])
+        return E.event_of(t["date"], t["symbol"], ev_docs[t["date"]])
 
     log = {"sessions": []}
     if os.path.exists(a.sessions):
@@ -187,6 +198,17 @@ def main():
             sel = [t for t in ts if t.get("tags", {}).get("or_width_ratio") is None]
             if sel:
                 splits.append(split_row("us500_day", "untagged", "us500", sel, dates, "No day type (logged before tags)"))
+
+    def event_group(e):
+        return "unknown" if e is None else "macro" if e in ("rate decision", "CPI") else e
+    EVENT_LABELS = {"earnings": "Earnings reaction day", "macro": "Rate decision or CPI day",
+                    "none": "No scheduled event", "unknown": "Unknown (no SEC 8-K, or not saved)"}
+    for rid in ("us500", "nas100"):
+        ts = [t for t in trades_out if t["record"] == rid]
+        for g in ("macro", "none", "unknown"):
+            sel = [t for t in ts if event_group(event(t)) == g]
+            if sel or g != "unknown":
+                splits.append(split_row("event_" + rid, g, rid, sel, dates, EVENT_LABELS[g]))
 
     stocks = []
     for bid, name, fname in BASKETS:
@@ -219,6 +241,10 @@ def main():
         splits.append(split_row("stop", g, "stocks", [t for t in stocks if lo_ <= stop_pct(t) < hi_], dates, label))
     for bid, name, _ in BASKETS:
         splits.append(split_row("theme", bid, "stocks", [t for t in stocks if t["basket"] == bid], dates, name))
+    for g in ("earnings", "macro", "none", "unknown"):
+        sel = [t for t in stocks if event_group(event(t)) == g]
+        if sel or g != "unknown":
+            splits.append(split_row("event", g, "stocks", sel, dates, EVENT_LABELS[g]))
 
     costs = []
     for rid, sel in (("us500", [t for t in trades_out if t["record"] == "us500"]),
@@ -239,7 +265,8 @@ def main():
         r = {k: t.get(k) for k in keep}
         tags = t.get("tags", {})
         r.update({"entry_time": tags.get("entry_time"), "exit_by": tags.get("exit_by"),
-                  "stop_pct": round(stop_pct(t), 3), "rvol": tags.get("rvol"), "or_width_ratio": tags.get("or_width_ratio")})
+                  "stop_pct": round(stop_pct(t), 3), "rvol": tags.get("rvol"), "or_width_ratio": tags.get("or_width_ratio"),
+                  "event": event(t)})
         rows.append(r)
 
     os.makedirs(a.out, exist_ok=True)
