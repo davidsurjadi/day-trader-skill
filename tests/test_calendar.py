@@ -7,7 +7,7 @@ from _load import load
 
 COPIES = [("trader-alerts", "alerts"), ("trader-entry", "entry"), ("trader-exit", "exit"),
           ("trader-risk", "check"), ("trader-scanner", "scan"),
-          ("trader-markets", "markets")]
+          ("trader-markets", "markets"), ("trader-saxo", "demo")]
 
 
 class CalendarCopies(unittest.TestCase):
