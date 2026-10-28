@@ -1,6 +1,6 @@
 # The Day Trader skill
 
-13 Claude skills for day trading: scan thousands of charts, track breaking news, time every entry and exit, and replay every outcome before you risk a dollar.
+14 Claude skills for day trading: scan thousands of charts, track breaking news, time every entry and exit, and replay every outcome before you risk a dollar.
 
 Free, MIT, no signup, no API key. The tools are plain Python that read free
 public data: Yahoo Finance charts, Nasdaq Trader's symbol lists, SEC EDGAR
@@ -57,7 +57,7 @@ The tools need Python 3.8 or newer. Nothing to pip install. The SEC tools
 email in `trader/config.json` (`"sec_user_agent": "Your Name you@example.com"`)
 or in the `SEC_USER_AGENT` environment variable.
 
-## The thirteen
+## The fourteen
 
 | command | job | what it does |
 | --- | --- | --- |
@@ -73,6 +73,7 @@ or in the `SEC_USER_AGENT` environment variable.
 | `/trader-analyst` | Earnings Analyst | Reads earnings reports and sums up what changed. |
 | `/trader-pelosi` | Pelosi Tracker | Reads Congress's stock-trade disclosures the minute they are filed. |
 | `/trader-markets` | Markets | Says when each stock, index CFD, gold and FX pair trades, in Singapore, New York and London time, and sizes to a max loss in your account currency. |
+| `/trader-saxo` | Saxo Reader | Reads your Saxo demo account, instruments, prices and bars. Read-only: it cannot place an order. |
 | `/trader-journal` | Trade Journal | Logs every closed trade in R and says, per setup, whether the record shows an edge after costs. |
 
 ## How to use it
@@ -146,6 +147,7 @@ python3 trader-analyst/facts.py TSLA                                   # quarter
 python3 trader-pelosi/ptr.py index --member pelosi                     # her PTRs this year
 python3 trader-markets/markets.py clock US500 XAUUSD EURUSD             # open or closed, in SGT
 python3 trader-scanner/scan.py daily --watchlist trader-scanner/watchlist.example.txt
+SAXO_TOKEN=... python3 trader-saxo/saxo.py balance                   # Saxo demo account, read-only
 python3 trader-journal/journal.py import --setup orb                    # broker fills -> trader/journal.json
 python3 trader-journal/journal.py stats                                # win rate, R after costs, verdict
 ```
@@ -226,6 +228,7 @@ trader-analyst/     SKILL.md, facts.py, metrics.example.json
 trader-pelosi/      SKILL.md, ptr.py
 trader-journal/     SKILL.md, journal.py, instruments.example.json
 trader-markets/     SKILL.md, markets.py, instruments.example.json
+trader-saxo/        SKILL.md, saxo.py
 tests/              unittest suite + offline fixtures
 ```
 
