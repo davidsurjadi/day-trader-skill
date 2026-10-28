@@ -1,0 +1,36 @@
+{
+  "trades": [
+    {
+      "id": "9c14cbe1dc25",
+      "date": "2026-10-28",
+      "symbol": "US500",
+      "setup": "orb15-mid-2R",
+      "asset_class": "index_cfd",
+      "account": "paper",
+      "side": "long",
+      "qty": 1.0,
+      "entry": 7751.6,
+      "stop": 7735.93,
+      "exit": 7735.93,
+      "point_value": 1.0,
+      "risk": 15.67,
+      "gross": -15.67,
+      "costs": 0.6,
+      "net": -16.27,
+      "r_gross": -1.0,
+      "r_net": -1.038,
+      "source": "paper.py",
+      "target": 7782.94,
+      "note": "file:US500.json; entry 12:50, stop at 13:15; range 7729.13-7742.73",
+      "tags": {
+        "entry_time": "12:50",
+        "exit_time": "13:15",
+        "exit_by": "stop",
+        "stop_pct": 0.202,
+        "or_width_ratio": 0.839,
+        "rvol": null,
+        "prior_sessions": 20
+      }
+    }
+  ]
+}
