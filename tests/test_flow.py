@@ -35,6 +35,12 @@ class Judge(unittest.TestCase):
         bars = {"10:10": bar(100, 100, 90, 100), "10:15": bar(100, 105, 99, 104), "15:50": bar(1, 1, 1, 1)}
         self.assertEqual(flow.simulate(bars, 100, 98, 104, "10:15"), (104, "target", "10:15"))
 
+    def test_the_decision_is_the_first_close_after_the_range(self):
+        self.assertEqual(flow.DECIDE_AT, "09:50")
+        self.assertEqual(flow.clock_label("09:50"), "9:50 AM")
+        self.assertEqual(flow.paper_now_utc("2026-10-29"), "2026-10-29T13:50:00Z")   # summer time
+        self.assertEqual(flow.paper_now_utc("2026-11-02"), "2026-11-02T14:50:00Z")   # winter time
+
     def test_flat_at_the_1550_close(self):
         bars = {"10:15": bar(100, 101, 99, 100.5), "15:50": bar(100.5, 101, 100, 100.8)}
         self.assertEqual(flow.simulate(bars, 100, 98, 104, "10:15"), (100.8, "flat", "15:50"))

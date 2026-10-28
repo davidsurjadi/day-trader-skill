@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""The repo's whole flow, once a day at 10:15 New York, as a paper record. Standard library only.
+"""The repo's whole flow, once a day at 09:50 New York, as a paper record. Standard library only.
 
   scanner -> news -> entry -> exit -> timemachine -> budget -> risk -> (approved) -> paper fill
   after the close: the stop, the target or flat at 15:55, read from the day's 5-minute bars
@@ -10,7 +10,9 @@ and are replaced, as David decided on 28 Oct 2026:
 
   broker   every ticket that passes the risk check counts as approved (his standing
            instruction). Nothing is sent to any broker: it is a paper fill at the
-           decision price, the close of the last 5-minute bar before 10:15.
+           decision price, the close of the 09:45 to 09:50 bar: the first bar that
+           can break the opening range (David moved the decision from 10:15 on
+           28 Oct 2026, before the first session, so entries sit at the breakout).
   alerts   the stop, the target and the 15:55 flat are read from the bars after
            the close, stop first when one bar touches both (as paper.py does).
 
@@ -49,7 +51,7 @@ import paper    # noqa: E402  (Yahoo bars, New York time)
 
 SETUP = "full-flow-orb"
 ACCOUNT = "paper-flow"
-DECIDE_AT = "10:15"
+DECIDE_AT = "09:50"              # the first 5-minute close after the 09:30-09:45 range
 FLAT_BAR = "15:50"                # flat at this bar's close, 15:55
 MIN_RISK_SHARE = 0.5            # skip a ticket the cash limit squeezes below half the max loss
 COSTS = {"pct": 0.08, "min": 1.0, "tax_pct": 9.0}
@@ -180,7 +182,7 @@ def morning(a):
         price = round(float((ent.get("last") or {}).get("close") or 0), 2)
         row["entry"] = price
         plan, why = tool_json("trader-exit/exit.py", ["plan", "--now", now, "--entry", str(price), "--time",
-                                                      "10:15 AM", "--write"], work)
+                                                      clock_label(DECIDE_AT), "--write"], work)
         if not plan or not plan.get("stop") or plan["stop"] >= price:
             row.update(decision="skipped", reason="exit: %s" % (why or "the price is back below the stop"))
             continue
@@ -203,7 +205,7 @@ def morning(a):
         orders = (read(os.path.join(work, "trader", "orders.json"), {}) or {}).get("orders", [])
         if code != 0 or not orders:
             last = [ln for ln in (err.strip() or out.strip()).splitlines() if "No order" in ln or "cash" in ln]
-            row.update(decision="skipped", reason="budget: %s" % ((last[0] if last else "no order fits").strip()[:160]))
+            row.update(decision="skipped", reason="budget: %s" % " ".join((last[0] if last else "no order fits").split())[:160])
             continue
         risk, why = tool_json("trader-risk/check.py", ["--now", now, "--today", day, "--no-write"], work)
         res = ((risk or {}).get("results") or [{}])[0]
@@ -236,8 +238,15 @@ def morning(a):
     return 0
 
 
+def clock_label(hm):
+    """ "09:50" -> "9:50 AM", the form trader-exit takes for --time."""
+    hh, mm = map(int, hm.split(":"))
+    return "%d:%02d %s" % (hh % 12 or 12, mm, "AM" if hh < 12 else "PM")
+
+
 def paper_now_utc(day):
-    local = datetime.datetime.combine(datetime.date.fromisoformat(day), datetime.time(10, 15))
+    hh, mm = map(int, DECIDE_AT.split(":"))
+    local = datetime.datetime.combine(datetime.date.fromisoformat(day), datetime.time(hh, mm))
     utc = local - datetime.timedelta(hours=paper.eastern_offset(local + datetime.timedelta(hours=5)))
     return utc.strftime("%Y-%m-%dT%H:%M:%SZ")
 
