@@ -24,6 +24,10 @@ One trade is logged per session at most, as qty 1 and point value 1, so its R is
 exact whatever the contract size; --cost is the round trip in price points (the
 US500.I spread). A session with no breakout logs nothing and says so.
 
+Each logged trade also carries "tags": facts about its day (entry and exit time, the
+stop distance as a percentage, the opening range's width and volume against the prior
+20 sessions) for grouping the results afterwards. The rule never reads them.
+
 Stocks (the stocks command) use the same rule, sized and charged like a real
 trade: whole shares, as many as fit both the max loss at the stop (--max-loss,
 50) and the position cap (--position-cap, 3750); commission on each side of
@@ -47,7 +51,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import journal  # noqa: E402  (the journal next to this file)
 
 RULE = {"name": "orb15-mid-2R", "or_minutes": 15, "target_r": 2.0, "flat_bar": "15:50"}
-YAHOO = "https://query2.finance.yahoo.com/v8/finance/chart/%s?range=5d&interval=5m"
+YAHOO = "https://query2.finance.yahoo.com/v8/finance/chart/%s?range=1mo&interval=5m"   # a month: the tags' history
 UA = "Mozilla/5.0 (compatible; day-trader-skill/2.0; +https://github.com/Jakeschincariol/day-trader-skill)"
 
 
@@ -85,25 +89,30 @@ def fetch_yahoo(symbol):
         raise PaperError("could not fetch %s from Yahoo: %s" % (symbol, e))
 
 
-def session_bars(text, day):
-    """Yahoo-style chart JSON -> the day's regular-session 5-minute bars, keyed "HH:MM" (New York)."""
+def all_sessions(text):
+    """Yahoo-style chart JSON -> {day: that day's regular-session 5-minute bars, keyed "HH:MM" (New York)}."""
     try:
         res = json.loads(text)["chart"]["result"][0]
     except (ValueError, KeyError, IndexError, TypeError):
         raise PaperError("the chart is not a Yahoo-style chart JSON")
     q = res["indicators"]["quote"][0]
+    vols = q.get("volume") or []
     out = {}
     for i, ts in enumerate(res.get("timestamp") or []):
         o, h, l, c = (q[k][i] for k in ("open", "high", "low", "close"))
         if None in (o, h, l, c) or ts % 300:
             continue
         ny = to_eastern(datetime.datetime(1970, 1, 1) + datetime.timedelta(seconds=ts))
-        if ny.date().isoformat() != day:
-            continue
         hm = ny.strftime("%H:%M")
         if "09:30" <= hm <= "15:55":
-            out[hm] = {"o": o, "h": h, "l": l, "c": c}
+            out.setdefault(ny.date().isoformat(), {})[hm] = {
+                "o": o, "h": h, "l": l, "c": c, "v": vols[i] if i < len(vols) else None}
     return out
+
+
+def session_bars(text, day):
+    """Yahoo-style chart JSON -> the day's regular-session 5-minute bars, keyed "HH:MM" (New York)."""
+    return all_sessions(text).get(day, {})
 
 
 def _slot(n):
@@ -150,6 +159,46 @@ def orb_trade(bars):
             "entry_bar": slots[k], "exit_bar": at, "or_high": round(oh, 2), "or_low": round(ol, 2)}, None
 
 
+# ---------------------------------------------------------------- tags (describe a trade; never change it)
+
+TAG_SESSIONS = 20       # prior sessions the day is compared with
+TAG_MIN_SESSIONS = 5    # fewer than this and a ratio is left out
+
+
+def trade_tags(text, day, t):
+    """Facts about the day a trade was taken, for grouping results afterwards. The rule never reads them.
+
+    or_width_ratio  today's opening-range width over the average of the prior sessions' (a volatility state)
+    rvol            today's opening-range volume over the average of the prior sessions' (relative volume)
+    stop_pct        the entry-to-stop distance as a percentage of the entry (what costs weigh against)
+    """
+    first = [_slot(i) for i in range(RULE["or_minutes"] // 5)]
+    days = all_sessions(text)
+    prior = [days[d] for d in sorted(d for d in days if d < day) if all(s in days[d] for s in first)]
+    prior = prior[-TAG_SESSIONS:]
+
+    def width(bars):
+        return max(bars[s]["h"] for s in first) - min(bars[s]["l"] for s in first)
+
+    def volume(bars):
+        v = [bars[s].get("v") for s in first]
+        return None if any(x is None for x in v) else float(sum(v))
+
+    def ratio(today, past):
+        past = [x for x in past if x is not None]
+        if today is None or len(past) < TAG_MIN_SESSIONS:
+            return None
+        avg = sum(past) / len(past)
+        return round(today / avg, 3) if avg > 0 else None
+
+    today = days.get(day, {})
+    return {"entry_time": t["entry_bar"], "exit_time": t["exit_bar"], "exit_by": t["outcome"],
+            "stop_pct": round((t["entry"] - t["stop"]) / t["entry"] * 100, 3),
+            "or_width_ratio": ratio(width(today), [width(b) for b in prior]),
+            "rvol": ratio(volume(today), [volume(b) for b in prior]),
+            "prior_sessions": len(prior)}
+
+
 # ---------------------------------------------------------------- command
 
 def stock_size(t, a):
@@ -189,6 +238,7 @@ def log_session(a, symbol, text, source, day, stock):
                              note="%s; entry %s, %s at %s; range %.2f-%.2f"
                              % (source, t["entry_bar"], t["outcome"], t["exit_bar"], t["or_low"], t["or_high"]),
                              source="paper.py")
+    rec["tags"] = trade_tags(text, day, t)
     line = ("%s %s: entry %.2f at the %s bar close, stop %.2f, target %.2f -> %s at %s, exit %.2f: %+.2fR gross, "
             "%+.2fR after %s"
             % (symbol, day, t["entry"], t["entry_bar"], t["stop"], t["target"], t["outcome"], t["exit_bar"],

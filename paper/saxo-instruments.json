@@ -1,0 +1,6 @@
+{
+ "instruments": {
+  "US500": {"saxo": {"uic": 4913, "asset_type": "CfdOnIndex", "symbol": "US500.I"}},
+  "NAS100": {"saxo": {"uic": 4912, "asset_type": "CfdOnIndex", "symbol": "USNAS100.I"}}
+ }
+}

@@ -71,6 +71,43 @@ class Rule(unittest.TestCase):
         self.assertEqual(paper.session_bars(chart(session([])), "2026-10-22"), {})
 
 
+def days_chart(sessions):
+    """sessions: list of (day, path_points, or_volume) -> one chart with every day in it, volume on each bar."""
+    ts, o, h, l, c, v = [], [], [], [], [], []
+    for day, points, or_volume in sessions:
+        base = int((datetime.datetime.strptime(day, "%Y-%m-%d") + datetime.timedelta(hours=13, minutes=30)
+                    - datetime.datetime(1970, 1, 1)).total_seconds())
+        prev = points[0][2]
+        for i, (hi, lo, cl) in enumerate(points):
+            ts.append(base + 300 * i)
+            o.append(prev); h.append(hi); l.append(lo); c.append(cl)
+            v.append(or_volume / 3 if i < 3 else 1000)
+            prev = cl
+    return json.dumps({"chart": {"result": [{"meta": {}, "timestamp": ts, "indicators": {
+        "quote": [{"open": o, "high": h, "low": l, "close": c, "volume": v}]}}]}})
+
+
+class Tags(unittest.TestCase):
+    def test_tags_describe_the_day_without_changing_the_trade(self):
+        quiet = [(105, 100, 102), (104, 101, 103), (104, 102, 103)] + [(104, 102, 103)] * 75   # range 5
+        prior = [("2026-10-%02d" % d, quiet, 3000) for d in (13, 14, 15, 16, 17, 20)]
+        text = days_chart(prior + [(DAY, session([(111, 105, 112), (140, 111, 135)]), 9000)])
+        t, _ = paper.orb_trade(paper.session_bars(text, DAY))
+        self.assertEqual((t["entry"], t["stop"], t["outcome"]), (112, 105.0, "target"))
+        tags = paper.trade_tags(text, DAY, t)
+        self.assertEqual(tags["prior_sessions"], 6)
+        self.assertEqual(tags["or_width_ratio"], 2.0)          # today's range 10 against 5
+        self.assertEqual(tags["rvol"], 3.0)                    # 9000 against 3000
+        self.assertEqual(tags["stop_pct"], round(7 / 112 * 100, 3))
+        self.assertEqual((tags["entry_time"], tags["exit_by"]), ("09:45", "target"))
+
+    def test_too_little_history_leaves_the_ratios_out(self):
+        text = chart(session([(111, 105, 112), (140, 111, 135)]))
+        t, _ = paper.orb_trade(paper.session_bars(text, DAY))
+        tags = paper.trade_tags(text, DAY, t)
+        self.assertEqual((tags["prior_sessions"], tags["or_width_ratio"], tags["rvol"]), (0, None, None))
+
+
 class Cli(unittest.TestCase):
     def test_logs_once_with_cost_and_paper_account(self):
         tmp = tempfile.mkdtemp()
