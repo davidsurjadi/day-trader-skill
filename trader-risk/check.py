@@ -58,6 +58,11 @@ What blocks an entry (on top):
                 time), or the market is closed (weekend, NYSE holiday, outside
                 9:30 to the close; on a 1:00 p.m. early close the window ends
                 3 hours earlier too)
+  sector        only with "sectors" and "max_open_per_sector": an entry in a
+                sector that already has that many stocks open (held in
+                trader/portfolio.json, placed today and not sold since, or
+                passed earlier in this batch). Stocks in one sector tend to
+                move together, so three of them can be one bet
   pdt           only with "pdt_guard": true: 3 day trades already in the last
                 5 business days (a 4th would trip the old pattern-day-trader rule)
 
@@ -81,7 +86,7 @@ DEFAULTS = {
     "no_entries_before": "09:45", "no_entries_after": "15:30", "flat_by": "15:55",
     "paper": True, "blocked": [], "allow_options": False, "allow_margin": False, "allow_short": False,
     "pdt_guard": False, "commission_per_order_usd": 0, "commission_per_share_usd": 0,
-    "slippage_per_share": 0,
+    "slippage_per_share": 0, "sectors": {}, "max_open_per_sector": 0,
 }
 COST_KEYS = ("commission_per_order_usd", "commission_per_share_usd", "slippage_per_share")
 ALPACA_FIELDS = ("symbol", "side", "qty", "notional", "type", "time_in_force", "limit_price",
@@ -376,6 +381,37 @@ def placed_today(state, today):
     return out
 
 
+def sector_map(cfg):
+    """{SYM: sector} from "sectors": {"ai": ["NVDA", ...]}. A ticker in two sectors is refused."""
+    out = {}
+    sectors = (cfg or {}).get("sectors") or {}
+    if not isinstance(sectors, dict):
+        raise RiskError("\"sectors\" wants an object like {\"ai\": [\"NVDA\", \"AMD\"]}")
+    for name, syms in sectors.items():
+        for t in syms or []:
+            t = str(t).strip().upper()
+            if t in out and out[t] != name:
+                raise RiskError("%s is in two sectors (%s and %s); put it in one" % (t, out[t], name))
+            out[t] = name
+    return out
+
+
+def open_symbols(shares, state, today):
+    """Stocks open now: held in the portfolio, or bought or placed as an entry
+    today with no sell filled after it (the log is in time order)."""
+    live = {t for t, n in shares.items() if (n or 0) > 1e-9}
+    for rec in (state or {}).get("orders", []):
+        if rec_day(rec) != today:
+            continue
+        t = str(rec.get("symbol", "")).upper()
+        st, sd = rec.get("status"), str(rec.get("side", "")).lower()
+        if (st == "placed" and rec_is_entry(rec)) or (st == "filled" and sd == "buy"):
+            live.add(t)
+        elif st == "filled" and sd == "sell" and not shares.get(t):
+            live.discard(t)
+    return live
+
+
 def day_trades(state, today):
     """Day trades in the last 5 business days: a (day, symbol) with both a buy
     and a sell placed or filled that day. An entry placed today counts too: it
@@ -428,6 +464,9 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
     placed_keys = {(str(r.get("symbol", "")).upper(), r.get("side")) for r in done_today}
     win_reasons, win_warns = window_check(now_et, c)
     pdt_n, pdt_list = day_trades(state, today) if c.get("pdt_guard") else (0, [])
+    sector_of = sector_map(c)
+    sector_cap = int(_f(c.get("max_open_per_sector")) or 0)
+    open_now = open_symbols(acct["shares"], state, today)
     seen = set()
     results = []
     batch_entries, batch_loss = 0, 0.0
@@ -661,6 +700,13 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
                 later.append("trades: %d entries placed today plus %d passed earlier in this batch, your limit "
                              "is %d a day" % (len(entries_today), batch_entries, cap_t))
             later.extend(win_reasons)
+            sector = sector_of.get(sym)
+            if sector_cap and sector and sym not in open_now:
+                same = sorted(t for t in open_now if sector_of.get(t) == sector)
+                if len(same) >= sector_cap:
+                    later.append("sector: %d %s stock%s already open (%s), your limit is %d at a time "
+                                 "(\"max_open_per_sector\")" % (len(same), sector, "" if len(same) == 1 else "s",
+                                                                  ", ".join(same), sector_cap))
             if c.get("pdt_guard") and pdt_n >= 3:
                 later.append("pdt: %d day trades in the last 5 business days (%s); a 4th trips the "
                              "pattern-day-trader rule your broker applies (\"pdt_guard\": true)"
@@ -700,6 +746,7 @@ def check(orders, cfg, portfolio=None, prices=None, state=None, today=None, now=
         verdict = "BLOCK" if reasons else "PASS"
         if verdict == "PASS":
             if kind == "entry" and side in ("buy", "sell"):
+                open_now.add(sym)
                 batch_entries += 1
                 batch_loss += max_loss or 0.0
             if side == "buy":

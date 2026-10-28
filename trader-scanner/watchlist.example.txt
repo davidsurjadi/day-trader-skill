@@ -1,0 +1,18 @@
+# Example watchlist: liquid US stocks tied to the AI trade (screened 27 Oct 2026 on
+# 20-day average dollar volume and daily range). A screen, not a recommendation.
+# Use it with: scan.py daily --watchlist trader-scanner/watchlist.example.txt
+# These stocks tend to move together: keep "max_open_per_sector" in trader/config.json.
+TSLA
+SPCX
+NVDA
+SMCI
+MSFT
+GOOGL
+AMZN
+MU
+AMD
+META
+AVGO
+PLTR
+DELL
+MRVL

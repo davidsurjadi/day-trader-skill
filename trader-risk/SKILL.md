@@ -74,6 +74,7 @@ batch that is fine order by order but breaks a limit together is caught.
 | daily loss | (entries) the max losses at the stops of today's entries, plus this one, over `max_daily_loss_usd` |
 | trades | (entries) `max_trades_per_day` entries already placed today |
 | window | (entries) before `no_entries_before` or after `no_entries_after`, or the market is closed |
+| sector | (entries, only with `sectors` and `max_open_per_sector`) that many stocks of the same sector already open: held, placed today and not sold since, or passed earlier in the batch |
 | pdt | (entries, only with `pdt_guard` true) 3 day trades already in the last 5 business days |
 | duplicate | (entries) the same symbol and side twice in one batch, or already placed today |
 | daily limit | (entries) `max_orders_per_day` orders already placed today |
@@ -85,6 +86,11 @@ How the numbers work:
   `trader/prices.json` (under 15 minutes old). A plan written at 10:15 cannot
   understate the risk at 10:55 after the price ran up. An older price is not
   used, and it says so.
+- **Sectors** are lists of tickers in `trader/config.json`, like
+  `"sectors": {"ai_tech": ["NVDA", "AMD", ...]}`, with `"max_open_per_sector": 2`.
+  Stocks in one sector tend to move together: on a bad day for the sector,
+  three open trades in it are one bet that loses three times. Getting out is
+  never blocked. A ticker in two sectors is refused as a config error.
 - **Costs** come from `commission_per_order_usd`, `commission_per_share_usd`
   and `slippage_per_share` in `trader/config.json` (all 0 by default, the
   same keys trader-budget sizes with). A stop-out pays two commissions and
