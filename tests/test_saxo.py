@@ -196,6 +196,31 @@ class Link(unittest.TestCase):
         fake["/trade/v1/infoprices"]["Quote"]["ErrorCode"] = "NoValidInput"
         self.assertEqual(sx.quote(c, 1, "FxSpot")["error"], "NoValidInput")
 
+    def test_bars_back_pages_until_the_cutoff(self):
+        # synthetic: 3 pages of 2 bars, one day apart, newest first page; Mode=UpTo pages older
+        days = ["2026-10-%02dT13:30:00Z" % d for d in (20, 21, 22, 23, 24, 25)]
+        pages = {None: days[4:], "2026-10-24T13:29:59Z": days[2:4], "2026-10-22T13:29:59Z": days[0:2]}
+
+        class Paging(Gateway):
+            def __call__(self, req, timeout=None):
+                self.calls.append(req)
+                q = dict(x.split("=", 1) for x in req.full_url.split("?", 1)[1].split("&"))
+                t = q.get("Time", "").replace("%3A", ":") or None
+                rows = [{"Time": d, "Open": 1, "High": 2, "Low": 0.5, "Close": 1.5} for d in pages.get(t, [])]
+                return Resp(json.dumps({"ChartInfo": {}, "Data": rows}).encode())
+
+        gw = Paging()
+        c = sx.Client(token="t", opener=gw, pause=0)
+        got = [r["Time"] for r in sx.bars_back(c, 1, "Stock", days=3)["Data"]]
+        self.assertEqual(got, days[3:])                    # bars after newest - 3 days; stops once past it
+        self.assertEqual(len(gw.calls), 2)
+        self.assertIn("Mode=UpTo", gw.calls[1].full_url)
+        got = [r["Time"] for r in sx.bars_back(c, 1, "Stock", days=30)["Data"]]
+        self.assertEqual(got, days)                        # runs out of data: stops, no duplicates
+        for bad in (0, 401):
+            with self.assertRaises(sx.SaxoError):
+                sx.bars_back(c, 1, "Stock", days=bad)
+
     def test_chart_limits(self):
         c, _ = client()
         for kw in ({"horizon": 7}, {"count": 1201}, {"count": 0}):

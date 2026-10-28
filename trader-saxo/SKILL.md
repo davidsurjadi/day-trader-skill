@@ -35,6 +35,7 @@ python3 "${CLAUDE_SKILL_DIR}/saxo.py" details <Uic> CfdOnIndex
 python3 "${CLAUDE_SKILL_DIR}/saxo.py" link US500 --uic <Uic> --asset-type CfdOnIndex --write
 python3 "${CLAUDE_SKILL_DIR}/saxo.py" quote US500 NVDA --write          # -> trader/prices.json
 python3 "${CLAUDE_SKILL_DIR}/saxo.py" bars US500 --horizon 5 --out trader/charts/US500-5m.json
+python3 "${CLAUDE_SKILL_DIR}/saxo.py" bars US500 --horizon 5 --days 60 --out trader/charts/US500-60d5m.json
 ```
 
 Every command takes `--json`.
@@ -99,6 +100,9 @@ AssetType. Link each one once:
 - `bars` saves a Yahoo-style chart JSON. FX bars come as bid and ask; the
   file holds their midpoint. Pass the file to trader-timemachine or
   trader-entry with `--offline`.
+- `--days N` pages back in requests of 1,200 bars until it covers N calendar
+  days, so the Time Machine has its 20+ full sessions. On the simulation
+  account in Oct 2026, 60 days of 5-minute stock bars took 3 requests.
 - Saxo allows 120 requests a minute per service group. The tool waits once on
   a 429 and then stops.
 
