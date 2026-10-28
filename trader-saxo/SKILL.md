@@ -41,14 +41,20 @@ Every command takes `--json`.
 
 ## The token
 
-The tool reads the token from the `SAXO_TOKEN` environment variable. It is
-the 24-hour token from https://www.developer.saxo/openapi/token and works
-only on the simulation account.
+The token is the 24-hour token from https://www.developer.saxo/openapi/token.
+It works only on the simulation account. It reaches Saxo one of two ways:
 
-- Never ask the user to paste the token, an app key or a secret into the
-  chat, and never print one. In a cloud session the user adds `SAXO_TOKEN`
-  in the environment's settings (Network secrets, or API credentials in an
-  older app); a new session picks it up.
+- **A network secret (cloud sessions, preferred).** In the environment's
+  settings, under Network secrets: type Bearer, allowed website
+  `gateway.saxobank.com`, path prefix `/sim/openapi/`, header
+  `Authorization`, prefix `Bearer`, value the token. The proxy adds the
+  header to requests to the demo gateway only, and the code never sees the
+  token. A new session picks it up.
+- **The `SAXO_TOKEN` environment variable** (on your own machine). The tool
+  sends it as the Bearer header.
+
+Never ask the user to paste the token, an app key or a secret into the chat,
+and never print one.
 - A 401 means the token is missing, wrong or past its 24 hours: say so and
   point to the token page. Do not retry with anything else.
 

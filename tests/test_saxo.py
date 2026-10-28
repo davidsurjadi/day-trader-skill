@@ -92,18 +92,20 @@ class ReadOnly(unittest.TestCase):
             self.assertTrue(r.full_url.startswith("https://gateway.saxobank.com/sim/openapi/"))
             self.assertEqual(r.get_header("Authorization"), "Bearer t")
 
-    def test_no_token_is_a_plain_refusal(self):
+    def test_no_token_sends_no_header_for_a_network_secret_to_add(self):
         old = os.environ.pop("SAXO_TOKEN", None)
         self.addCleanup(lambda: old is not None and os.environ.__setitem__("SAXO_TOKEN", old))
-        with self.assertRaises(sx.SaxoError) as e:
-            sx.Client()
-        self.assertIn("Never paste it", str(e.exception))
+        gw = Gateway()
+        sx.balance(sx.Client(opener=gw, pause=0))
+        self.assertIsNone(gw.calls[0].get_header("Authorization"))
 
-    def test_an_expired_token_says_so(self):
+    def test_an_expired_or_missing_token_says_so(self):
         c, _ = client(status=401)
         with self.assertRaises(sx.SaxoError) as e:
             sx.balance(c)
         self.assertIn("24 hours", str(e.exception))
+        self.assertIn("network secret", str(e.exception))
+        self.assertIn("Never paste it", str(e.exception))
 
 
 class Reads(unittest.TestCase):

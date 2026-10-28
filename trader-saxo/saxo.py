@@ -18,6 +18,7 @@ file and every request is a GET.
              JSON so trader-timemachine and trader-entry can read it offline
 
     export SAXO_TOKEN=...            # the 24-hour token from developer.saxo, never in the chat
+                                     # (or a network secret that adds the Authorization header)
     python3 saxo.py whoami
     python3 saxo.py find "S&P 500" --asset-types CfdOnIndex
     python3 saxo.py link US500 --uic <Uic from find> --asset-type CfdOnIndex --write
@@ -54,10 +55,9 @@ class SaxoError(Exception):
 
 class Client:
     def __init__(self, token=None, base=SIM, opener=None, pause=0.5):
+        # No token here is normal when a network secret adds the Authorization header on the way out
+        # (a cloud environment's "Network secrets"); the code then never sees the token at all.
         self.token = token if token is not None else os.environ.get(TOKEN_ENV, "").strip()
-        if not self.token:
-            raise SaxoError("no token: set %s in the environment (the 24-hour token from "
-                            "https://www.developer.saxo/openapi/token). Never paste it into a chat." % TOKEN_ENV)
         self.base = base.rstrip("/")
         self.opener = opener or urllib.request.urlopen
         self.pause = pause
@@ -65,8 +65,10 @@ class Client:
     def get(self, path, params=None):
         q = {k: v for k, v in (params or {}).items() if v is not None}
         url = self.base + path + ("?" + urllib.parse.urlencode(q, safe=",$") if q else "")
-        req = urllib.request.Request(url, method="GET", headers={
-            "Authorization": "Bearer " + self.token, "Accept": "application/json", "User-Agent": UA})
+        headers = {"Accept": "application/json", "User-Agent": UA}
+        if self.token:
+            headers["Authorization"] = "Bearer " + self.token
+        req = urllib.request.Request(url, method="GET", headers=headers)
         for attempt in (1, 2):
             try:
                 with self.opener(req, timeout=20) as r:
@@ -78,7 +80,9 @@ class Client:
                     continue
                 if e.code == 401:
                     raise SaxoError("Saxo said 401 unauthorised: the token is missing, wrong or past its "
-                                    "24 hours. Get a new one at https://www.developer.saxo/openapi/token")
+                                    "24 hours. Get a new one at https://www.developer.saxo/openapi/token and "
+                                    "put it in %s or in the environment's network secret for "
+                                    "gateway.saxobank.com. Never paste it into a chat." % TOKEN_ENV)
                 detail = ""
                 try:
                     detail = e.read().decode("utf-8")[:300]
