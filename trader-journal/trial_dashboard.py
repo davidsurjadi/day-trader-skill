@@ -25,6 +25,10 @@ first trial session) so the grouping cannot drift toward whatever looked good:
   stocks by stop distance  under 0.5%, 0.5% to 1%, 1% or more
   stocks by theme          AI 18, other 289
 
+The Saxo cross-check runs the same rule on Saxo's own US500.I and USNAS100.I bars (read
+from the demo gateway, no orders) beside the Yahoo-based records, which stay the main
+ones. saxo.json pairs the two for each session: did both trade, and how far apart.
+
 The moomoo column re-prices each stock trade with moomoo SG's published US fees as of
 28 Oct 2026 (USD 0 commission for eligible clients, USD 0.99 platform fee an order plus
 9% GST, settlement USD 0.003 a share up to 1% of the amount, SEC and FINRA sell fees,
@@ -45,6 +49,7 @@ import journal as J  # noqa: E402  (the same statistics journal.py prints)
 
 SGT = datetime.timezone(datetime.timedelta(hours=8), "SGT")   # Singapore keeps no summer time
 INDEX = [("us500", "US500", "us500-journal.json"), ("nas100", "NAS100", "nas100-journal.json")]
+SAXO = [("us500", "US500 on Saxo prices", "us500-saxo-journal.json"), ("nas100", "NAS100 on Saxo prices", "nas100-saxo-journal.json")]
 BASKETS = [("ai18", "AI 18", "stocks-journal.json"), ("other289", "Other 289", "broad-journal.json")]
 INDEX_RISK_USD = 50.0
 SMALL = [("small5k", "USD 5,000 account", 1), ("small10k", "USD 10,000 account", 2)]
@@ -238,7 +243,19 @@ def main():
         rows.append(r)
 
     os.makedirs(a.out, exist_ok=True)
-    for fname, data in (("records.json", records), ("splits.json", splits), ("costs.json", costs),
+    compare = []
+    for rid, label, fname in SAXO:
+        sx = {t["date"]: t for t in load(os.path.join(a.journals, fname))}
+        yh = {t["date"]: t for t in trades_out if t["record"] == rid}
+        for d in dates:
+            y, x = yh.get(d), sx.get(d)
+            compare.append({"key": d + ":" + rid, "date": d, "record": rid, "label": label,
+                            "yahoo_r": y["r_net"] if y else None, "saxo_r": x["r_net"] if x else None,
+                            "yahoo_entry": y["entry"] if y else None, "saxo_entry": x["entry"] if x else None,
+                            "agree": "both traded" if y and x else "Yahoo only" if y else "Saxo only" if x else "neither",
+                            "r_gap": round(x["r_net"] - y["r_net"], 3) if y and x else None})
+
+    for fname, data in (("saxo.json", compare), ("records.json", records), ("splits.json", splits), ("costs.json", costs),
                         ("trades.json", rows), ("sessions.json", log["sessions"])):
         with open(os.path.join(a.out, fname), "w") as f:
             json.dump(data, f)
