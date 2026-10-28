@@ -40,6 +40,12 @@ class Rule(unittest.TestCase):
         self.assertEqual(p["amount"], 5.5)                     # 50 / 9.01 = 5.55 -> 5.5
         self.assertLessEqual(p["risk_usd"], 50)
 
+    def test_us30_prices_sit_on_its_0_1_tick(self):
+        p = demo.plan_trade(47123.37, 47011.11, 50, tick=0.1)
+        self.assertEqual((p["entry"], p["stop"], p["target"]), (47123.5, 47067.2, 47236.1))
+        for k in ("entry", "stop", "target"):
+            self.assertAlmostEqual(round(p[k] * 10), p[k] * 10, places=6)
+
     def test_the_order_has_its_stop_and_target_attached(self):
         body = demo.order_body("acc", 4913, demo.plan_trade(7716.0, 7698.0, 50))
         self.assertEqual((body["OrderType"], body["BuySell"], body["OrderPrice"]), ("StopIfTraded", "Buy", 7716.01))
