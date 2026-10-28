@@ -140,6 +140,53 @@ Never backfill past sessions into the forward record: it starts on the day the
 trial starts. Read it with the verdict rules above; do not change the rule
 mid-trial.
 
+## The whole flow, daily (paper)
+
+`flow.py` runs the pack's own flow once a day at 09:50 New York (the first
+5-minute close after the opening range), on the 307
+watchlist stocks, and keeps it as a separate paper record (account
+`paper-flow`, setup `full-flow-orb`): scanner, news, entry, exit, time
+machine, budget (USD 10,000, USD 50 a trade) and risk, each the skill's own
+tool. David decided on 28 Oct 2026 that a ticket passing the risk check counts
+as approved, so the broker step is a paper fill at the 09:50 price; the alerts
+are read from the bars after the close (stop first when one bar touches both,
+flat at 15:55). News blocks only a halt or a share offering; the time
+machine never blocks, its averages are kept as tags. A ticket the cash limit
+squeezes below half the max loss is skipped. Costs are Saxo SG Classic.
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/flow.py" morning --date 2026-10-29 --dir paper/flow \
+    --watchlist trader-scanner/watchlist.example.txt trader-scanner/watchlist-broad.txt \
+    --user-agent "Your Name you@example.com"
+python3 "${CLAUDE_SKILL_DIR}/flow.py" close --date 2026-10-29 --dir paper/flow --journal paper/flow-journal.json
+```
+
+## Event days (tags, not filters)
+
+`events.py` tags each trial trade with the scheduled event of its session, so
+the record can be read with and without event days from the same trades. It
+changes no trade. David chose this on 28 Oct 2026, before the first logged
+session.
+
+| tag | source |
+| --- | --- |
+| earnings | SEC EDGAR: the stock's 8-K with item 2.02; before 16:00 New York counts that session, after it the next |
+| rate decision | the second day of each FOMC meeting, federalreserve.gov (read 28 Oct 2026) |
+| CPI | the BLS CPI release day, 08:30 New York (read 28 Oct 2026) |
+| unknown | a foreign filer (6-K, not 8-K) or a ticker SEC does not list; never counted as "no event" |
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/events.py" cache --date 2026-10-29 --dir paper/events \
+    --user-agent "Your Name you@example.com" \
+    --watchlist trader-scanner/watchlist.example.txt trader-scanner/watchlist-broad.txt
+```
+
+Each session is saved once and never re-read, so its tags cannot drift.
+SEC requires a contact in the User-Agent; it goes to sec.gov only.
+`trial_dashboard.py` reads the saved days into the "event" split groups.
+Judge them like the other splits: they describe, they do not decide, and an
+earnings group of a few trades proves nothing.
+
 ## Rules
 
 - Never invent a trade, a fill, a stop or a cost. If a number is missing, ask.
