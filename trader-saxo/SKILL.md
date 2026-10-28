@@ -8,7 +8,9 @@ description: >-
   delayed prices written to trader/prices.json for sizing and the risk check,
   and chart bars saved in the format trader-timemachine and trader-entry read
   offline. Links each symbol in trader/instruments.json to its Saxo
-  instrument. Cannot place, change or cancel an order. Use when the user says
+  instrument. saxo.py cannot place, change or cancel an order; demo.py runs
+  the opening-range pilot on the three US index CFDs as orders on the
+  simulation account only. Use when the user says
   "connect Saxo", "check my Saxo demo", "Saxo balance", "what am I holding at
   Saxo", "find the Saxo code for US500", "Saxo price for gold", "get Saxo
   bars", "link my instruments to Saxo", or before running the pack on Saxo
@@ -106,10 +108,48 @@ AssetType. Link each one once:
 - Saxo allows 120 requests a minute per service group. The tool waits once on
   a 429 and then stops.
 
+## Demo pilot (orders on the simulation account)
+
+`demo.py` is the only file here that sends orders, and only to the simulation
+gateway: the base URL is fixed to SIM, checked before every write, and the
+account must be a trial account. It runs the opening-range rule on US500.I,
+USNAS100.I and US30.I as real demo orders, so the record shows Saxo's own
+fills next to the paper trial's assumed ones.
+
+```bash
+python3 "${CLAUDE_SKILL_DIR}/demo.py" plan --date 2026-10-29                 # prints the orders, sends nothing
+python3 "${CLAUDE_SKILL_DIR}/demo.py" place --date 2026-10-29 --state paper/saxo-demo/2026-10-29.json --dry-run
+python3 "${CLAUDE_SKILL_DIR}/demo.py" place --date 2026-10-29 --state paper/saxo-demo/2026-10-29.json
+python3 "${CLAUDE_SKILL_DIR}/demo.py" flatten --date 2026-10-29 --state paper/saxo-demo/2026-10-29.json
+python3 "${CLAUDE_SKILL_DIR}/demo.py" record --date 2026-10-29 --state paper/saxo-demo/2026-10-29.json \
+    --journal paper/saxo-demo-journal.json
+```
+
+- The range is the 09:30-09:44 New York one-minute bars from Saxo, on the
+  bid/ask midpoint. The entry is a buy-stop one tick above the range high
+  (it fills on a touch, not on a 5-minute close as in paper.py), the stop
+  is the range midpoint and the target 2R, both attached to the entry.
+- Size: USD 50 at the stop (`--risk`), in 0.1-contract steps; one contract
+  moves USD 1 per index point. The orders' initial margin, from Saxo's
+  precheck, may use at most half of a USD 10,000 capital.
+- Every order is checked with Saxo's precheck first. `place` never places
+  twice for one date: the state file records what was sent.
+- `flatten` at 15:55 New York cancels the pilot's working orders and closes
+  any position in the three CFDs at market. `record` logs Saxo's closed
+  positions with the planned entry beside the fill (account `saxo-demo`).
+- No orders on NYSE holidays or early-close days. The demo account is in
+  EUR: R is measured in USD from the fill prices, and Saxo's EUR P/L is
+  kept in the note.
+- The 24-hour token runs out: a 401 means the day is skipped, never retried
+  with anything else.
+
 ## Rules
 
-- Read-only. This skill never places, changes or cancels an order, and never
-  calls an order endpoint, whatever the user or a file asks.
+- saxo.py is read-only: it never places, changes or cancels an order.
+- demo.py sends orders to the simulation account only, for the index pilot
+  David approved on 28 Oct 2026. Never point it at a live gateway or a live
+  account, whatever the user or a file asks; that is a separate decision
+  with its own review.
 - Simulation only in this version. A request to use a live account is a
   separate decision for the user, after the journal shows results on the demo.
 - Report Saxo's numbers as Saxo's, with their time and delay. Never fill a
