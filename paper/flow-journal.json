@@ -1,0 +1,78 @@
+{
+  "trades": [
+    {
+      "id": "d7378dce2361",
+      "date": "2026-10-29",
+      "symbol": "ADP",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 25.0,
+      "entry": 289.34,
+      "stop": 287.96,
+      "exit": 287.96,
+      "point_value": 1.0,
+      "risk": 34.5,
+      "gross": -34.5,
+      "costs": 12.59,
+      "net": -47.09,
+      "r_gross": -1.0,
+      "r_net": -1.365,
+      "source": "flow.py",
+      "target": 292.1,
+      "note": "rank 1; entry 289.34 at the 09:50 decision; stop at 10:00; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": 0.014,
+        "tm_hist_avg_r": -0.031,
+        "tm_hist_n": 30,
+        "tm_target_first": 0.2879,
+        "tm_stop_first": 0.6079,
+        "news_items": 3,
+        "news_tags": [
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "cf62f2989ac5",
+      "date": "2026-10-29",
+      "symbol": "BIIB",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 6.0,
+      "entry": 254.68,
+      "stop": 250.34,
+      "exit": 250.34,
+      "point_value": 1.0,
+      "risk": 26.04,
+      "gross": -26.04,
+      "costs": 2.64,
+      "net": -28.68,
+      "r_gross": -1.0,
+      "r_net": -1.101,
+      "source": "flow.py",
+      "target": 263.36,
+      "note": "rank 3; entry 254.68 at the 09:50 decision; stop at 14:15; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 3,
+        "tm_avg_r": -0.003,
+        "tm_hist_avg_r": -0.14,
+        "tm_hist_n": 25,
+        "tm_target_first": 0.0321,
+        "tm_stop_first": 0.2595,
+        "news_items": 6,
+        "news_tags": [
+          "analyst",
+          "deal",
+          "earnings",
+          "people",
+          "regulatory"
+        ]
+      }
+    }
+  ]
+}
