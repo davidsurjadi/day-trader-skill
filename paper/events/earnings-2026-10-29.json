@@ -1,0 +1,197 @@
+{
+ "date": "2026-10-29",
+ "source": "SEC EDGAR submissions, 8-K item 2.02",
+ "read_at": "2026-10-29T20:16:41+00:00",
+ "earnings": [
+  {
+   "symbol": "MSFT",
+   "accepted_utc": "2026-10-28T20:04:44.000Z"
+  },
+  {
+   "symbol": "GOOGL",
+   "accepted_utc": "2026-10-28T20:01:33.000Z"
+  },
+  {
+   "symbol": "GOOG",
+   "accepted_utc": "2026-10-28T20:01:33.000Z"
+  },
+  {
+   "symbol": "LLY",
+   "accepted_utc": "2026-10-29T11:03:30.000Z"
+  },
+  {
+   "symbol": "NOW",
+   "accepted_utc": "2026-10-28T20:14:14.000Z"
+  },
+  {
+   "symbol": "CAT",
+   "accepted_utc": "2026-10-29T10:33:40.000Z"
+  },
+  {
+   "symbol": "KLAC",
+   "accepted_utc": "2026-10-28T20:07:50.000Z"
+  },
+  {
+   "symbol": "MA",
+   "accepted_utc": "2026-10-29T12:04:22.000Z"
+  },
+  {
+   "symbol": "MRK",
+   "accepted_utc": "2026-10-29T10:43:01.000Z"
+  },
+  {
+   "symbol": "LIN",
+   "accepted_utc": "2026-10-29T11:10:44.000Z"
+  },
+  {
+   "symbol": "TMUS",
+   "accepted_utc": "2026-10-28T20:02:56.000Z"
+  },
+  {
+   "symbol": "CVNA",
+   "accepted_utc": "2026-10-28T20:05:55.000Z"
+  },
+  {
+   "symbol": "DASH",
+   "accepted_utc": "2026-10-29T11:21:00.000Z"
+  },
+  {
+   "symbol": "PWR",
+   "accepted_utc": "2026-10-29T10:58:06.000Z"
+  },
+  {
+   "symbol": "F",
+   "accepted_utc": "2026-10-28T20:07:18.000Z"
+  },
+  {
+   "symbol": "FTNT",
+   "accepted_utc": "2026-10-28T20:09:06.000Z"
+  },
+  {
+   "symbol": "BMY",
+   "accepted_utc": "2026-10-29T11:05:52.000Z"
+  },
+  {
+   "symbol": "LNG",
+   "accepted_utc": "2026-10-29T11:31:19.000Z"
+  },
+  {
+   "symbol": "HWM",
+   "accepted_utc": "2026-10-29T11:05:34.000Z"
+  },
+  {
+   "symbol": "FDX",
+   "accepted_utc": "2026-10-28T20:12:47.000Z"
+  },
+  {
+   "symbol": "MO",
+   "accepted_utc": "2026-10-29T11:04:43.000Z"
+  },
+  {
+   "symbol": "EQIX",
+   "accepted_utc": "2026-10-28T20:12:08.000Z"
+  },
+  {
+   "symbol": "XEL",
+   "accepted_utc": "2026-10-28T21:38:08.000Z"
+  },
+  {
+   "symbol": "VICI",
+   "accepted_utc": "2026-10-28T20:16:17.000Z"
+  },
+  {
+   "symbol": "LHX",
+   "accepted_utc": "2026-10-29T10:04:22.000Z"
+  },
+  {
+   "symbol": "DHI",
+   "accepted_utc": "2026-10-29T16:51:14.000Z"
+  },
+  {
+   "symbol": "VMC",
+   "accepted_utc": "2026-10-29T10:55:38.000Z"
+  },
+  {
+   "symbol": "CMG",
+   "accepted_utc": "2026-10-28T20:10:53.000Z"
+  },
+  {
+   "symbol": "ICE",
+   "accepted_utc": "2026-10-29T11:30:27.000Z"
+  }
+ ],
+ "unknown": [
+  {
+   "symbol": "TSM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NBIS",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ASML",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ARM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "BABA",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NOK",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SPOT",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NU",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "PDD",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NVO",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SHEL",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WBD",
+   "why": "not in SEC's ticker list"
+  },
+  {
+   "symbol": "AEM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WPM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "B",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NTR",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SE",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "GRAB",
+   "why": "files no 8-K (a foreign filer)"
+  }
+ ]
+}
