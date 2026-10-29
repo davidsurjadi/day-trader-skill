@@ -4,6 +4,11 @@
    "date": "2026-10-28",
    "completed_at": "2026-10-29T06:25:36+08:00",
    "note": "WBD had no bars"
+  },
+  {
+   "date": "2026-10-29",
+   "completed_at": "2026-10-30T06:26:10+08:00",
+   "note": "WBD had no bars. Saxo cross-check skipped: 401, token expired"
   }
  ]
 }
