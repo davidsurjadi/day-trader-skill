@@ -73,6 +73,77 @@
           "regulatory"
         ]
       }
+    },
+    {
+      "id": "143330de4e50",
+      "date": "2026-10-30",
+      "symbol": "ABBV",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 15.0,
+      "entry": 297.06,
+      "stop": 293.85,
+      "exit": 293.85,
+      "point_value": 1.0,
+      "risk": 48.15,
+      "gross": -48.15,
+      "costs": 7.73,
+      "net": -55.88,
+      "r_gross": -1.0,
+      "r_net": -1.161,
+      "source": "flow.py",
+      "target": 303.48,
+      "note": "rank 1; entry 297.06 at the 09:50 decision; stop at 10:20; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": 0.037,
+        "tm_hist_avg_r": -0.174,
+        "tm_hist_n": 34,
+        "tm_target_first": 0.0489,
+        "tm_stop_first": 0.3179,
+        "news_items": 14,
+        "news_tags": [
+          "earnings",
+          "macro"
+        ]
+      }
+    },
+    {
+      "id": "e20bef474ae7",
+      "date": "2026-10-30",
+      "symbol": "ADBE",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 16.0,
+      "entry": 254.55,
+      "stop": 251.6,
+      "exit": 251.6,
+      "point_value": 1.0,
+      "risk": 47.2,
+      "gross": -47.2,
+      "costs": 7.06,
+      "net": -54.26,
+      "r_gross": -1.0,
+      "r_net": -1.15,
+      "source": "flow.py",
+      "target": 260.45,
+      "note": "rank 2; entry 254.55 at the 09:50 decision; stop at 12:35; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.03,
+        "tm_hist_avg_r": -0.116,
+        "tm_hist_n": 31,
+        "tm_target_first": 0.1331,
+        "tm_stop_first": 0.4915,
+        "news_items": 4,
+        "news_tags": [
+          "earnings"
+        ]
+      }
     }
   ]
 }
