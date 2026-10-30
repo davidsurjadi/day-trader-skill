@@ -1,0 +1,185 @@
+{
+ "date": "2026-10-30",
+ "source": "SEC EDGAR submissions, 8-K item 2.02",
+ "read_at": "2026-10-30T20:16:19+00:00",
+ "earnings": [
+  {
+   "symbol": "SNDK",
+   "accepted_utc": "2026-10-29T20:13:53.000Z"
+  },
+  {
+   "symbol": "AMZN",
+   "accepted_utc": "2026-10-29T20:05:27.000Z"
+  },
+  {
+   "symbol": "INTC",
+   "accepted_utc": "2026-10-29T20:08:53.000Z"
+  },
+  {
+   "symbol": "XOM",
+   "accepted_utc": "2026-10-30T10:32:50.000Z"
+  },
+  {
+   "symbol": "MSTR",
+   "accepted_utc": "2026-10-29T20:03:24.000Z"
+  },
+  {
+   "symbol": "CVX",
+   "accepted_utc": "2026-10-30T10:16:00.000Z"
+  },
+  {
+   "symbol": "COIN",
+   "accepted_utc": "2026-10-29T20:09:03.000Z"
+  },
+  {
+   "symbol": "ABBV",
+   "accepted_utc": "2026-10-30T11:51:51.000Z"
+  },
+  {
+   "symbol": "MPWR",
+   "accepted_utc": "2026-10-29T20:01:11.000Z"
+  },
+  {
+   "symbol": "GILD",
+   "accepted_utc": "2026-10-29T20:03:48.000Z"
+  },
+  {
+   "symbol": "RDDT",
+   "accepted_utc": "2026-10-29T20:08:57.000Z"
+  },
+  {
+   "symbol": "AXTI",
+   "accepted_utc": "2026-10-29T20:16:48.000Z"
+  },
+  {
+   "symbol": "SYK",
+   "accepted_utc": "2026-10-29T20:11:16.000Z"
+  },
+  {
+   "symbol": "SBUX",
+   "accepted_utc": "2026-10-29T20:07:14.000Z"
+  },
+  {
+   "symbol": "RIVN",
+   "accepted_utc": "2026-10-29T20:00:35.000Z"
+  },
+  {
+   "symbol": "SPXC",
+   "accepted_utc": "2026-10-29T20:11:23.000Z"
+  },
+  {
+   "symbol": "D",
+   "accepted_utc": "2026-10-30T11:31:09.000Z"
+  },
+  {
+   "symbol": "EXC",
+   "accepted_utc": "2026-10-30T10:57:41.000Z"
+  },
+  {
+   "symbol": "DLR",
+   "accepted_utc": "2026-10-29T20:17:20.000Z"
+  },
+  {
+   "symbol": "GD",
+   "accepted_utc": "2026-10-30T12:09:27.000Z"
+  },
+  {
+   "symbol": "LYB",
+   "accepted_utc": "2026-10-30T10:31:17.000Z"
+  },
+  {
+   "symbol": "CL",
+   "accepted_utc": "2026-10-30T11:56:34.000Z"
+  },
+  {
+   "symbol": "MDLZ",
+   "accepted_utc": "2026-10-29T20:09:58.000Z"
+  },
+  {
+   "symbol": "REGN",
+   "accepted_utc": "2026-10-30T10:50:20.000Z"
+  },
+  {
+   "symbol": "DXCM",
+   "accepted_utc": "2026-10-29T20:03:50.000Z"
+  },
+  {
+   "symbol": "CBOE",
+   "accepted_utc": "2026-10-30T11:30:16.000Z"
+  }
+ ],
+ "unknown": [
+  {
+   "symbol": "TSM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NBIS",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ASML",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ARM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "BABA",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NOK",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SPOT",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NU",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "PDD",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NVO",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SHEL",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WBD",
+   "why": "not in SEC's ticker list"
+  },
+  {
+   "symbol": "AEM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WPM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "B",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NTR",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SE",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "GRAB",
+   "why": "files no 8-K (a foreign filer)"
+  }
+ ]
+}
