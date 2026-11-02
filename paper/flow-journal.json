@@ -144,6 +144,74 @@
           "earnings"
         ]
       }
+    },
+    {
+      "id": "a86b0c56f45a",
+      "date": "2026-11-02",
+      "symbol": "AA",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 116.0,
+      "entry": 40.13,
+      "stop": 39.7,
+      "exit": 39.92,
+      "point_value": 1.0,
+      "risk": 49.88,
+      "gross": -24.36,
+      "costs": 8.1,
+      "net": -32.46,
+      "r_gross": -0.488,
+      "r_net": -0.651,
+      "source": "flow.py",
+      "target": 40.99,
+      "note": "rank 1; entry 40.13 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.149,
+        "tm_hist_avg_r": -0.106,
+        "tm_hist_n": 32,
+        "tm_target_first": 0.1809,
+        "tm_stop_first": 0.6149,
+        "news_items": 1,
+        "news_tags": []
+      }
+    },
+    {
+      "id": "92babeae0ea9",
+      "date": "2026-11-02",
+      "symbol": "ABNB",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 19.0,
+      "entry": 170.88,
+      "stop": 168.28,
+      "exit": 171.16,
+      "point_value": 1.0,
+      "risk": 49.4,
+      "gross": 5.32,
+      "costs": 5.67,
+      "net": -0.35,
+      "r_gross": 0.108,
+      "r_net": -0.007,
+      "source": "flow.py",
+      "target": 176.08,
+      "note": "rank 2; entry 170.88 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.037,
+        "tm_hist_avg_r": 0.168,
+        "tm_hist_n": 32,
+        "tm_target_first": 0.0252,
+        "tm_stop_first": 0.274,
+        "news_items": 1,
+        "news_tags": [
+          "earnings"
+        ]
+      }
     }
   ]
 }
