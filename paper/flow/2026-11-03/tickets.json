@@ -1,0 +1,107 @@
+{
+ "date": "2026-11-03",
+ "decided_at": "2026-11-03 09:50",
+ "hits": 24,
+ "looked": [
+  {
+   "rank": 1,
+   "symbol": "AAPL",
+   "trigger": "9:50 AM",
+   "or_high": 332.67,
+   "or_low": 325.33,
+   "news_items": 19,
+   "news_tags": [
+    "analyst",
+    "earnings",
+    "macro",
+    "people"
+   ],
+   "news_error": null,
+   "entry": 333.82,
+   "stop": 329.0,
+   "target": 343.46,
+   "tm_avg_r": 0.079,
+   "tm_target_first": 0.0089,
+   "tm_stop_first": 0.1181,
+   "tm_hist_avg_r": 0.35,
+   "tm_hist_n": 29,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 7 % (target first 0.9 % vs stop first 11.8 %).",
+   "qty": 10,
+   "max_loss": 48.2,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 2,
+   "symbol": "APLD",
+   "trigger": "9:50 AM",
+   "or_high": 17.15,
+   "or_low": 16.2,
+   "news_items": 1,
+   "news_tags": [],
+   "news_error": null,
+   "entry": 17.29,
+   "stop": 16.67,
+   "target": 18.53,
+   "tm_avg_r": -0.108,
+   "tm_target_first": 0.0226,
+   "tm_stop_first": 0.3209,
+   "tm_hist_avg_r": -0.268,
+   "tm_hist_n": 28,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 7 % (target first 2.3 % vs stop first 32.1 %).",
+   "qty": 80,
+   "max_loss": 49.6,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 3,
+   "symbol": "APP",
+   "trigger": "9:50 AM",
+   "or_high": 236.11,
+   "or_low": 231.1,
+   "news_items": 3,
+   "news_tags": [
+    "earnings"
+   ],
+   "news_error": null,
+   "entry": 236.77,
+   "stop": 233.6,
+   "target": 243.11,
+   "tm_avg_r": -0.068,
+   "tm_target_first": 0.1726,
+   "tm_stop_first": 0.5274,
+   "tm_hist_avg_r": -0.178,
+   "tm_hist_n": 33,
+   "tm_verdict": "Leans toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 25 % (target first 17.3 % vs stop first 52.7 %).",
+   "qty": 15,
+   "max_loss": 47.55,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  }
+ ],
+ "taken": [
+  "AAPL",
+  "APLD",
+  "APP"
+ ],
+ "config": {
+  "budget": 10000,
+  "max_order_usd": 7500,
+  "max_position_pct": 75,
+  "max_loss_per_trade_usd": 50,
+  "max_daily_loss_usd": 150,
+  "max_trades_per_day": 3
+ },
+ "costs": {
+  "pct": 0.08,
+  "min": 1.0,
+  "tax_pct": 9.0
+ }
+}
