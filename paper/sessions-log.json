@@ -19,6 +19,11 @@
    "date": "2026-11-02",
    "completed_at": "2026-11-03T06:25:42+08:00",
    "note": "WBD had no bars. Saxo cross-check skipped: 401, token expired"
+  },
+  {
+   "date": "2026-11-03",
+   "completed_at": "2026-11-04T06:26:01+08:00",
+   "note": "WBD had no bars. Saxo cross-check skipped: 401, token expired"
   }
  ]
 }
