@@ -1,0 +1,149 @@
+{
+ "date": "2026-11-04",
+ "source": "SEC EDGAR submissions, 8-K item 2.02",
+ "read_at": "2026-11-04T21:12:46+00:00",
+ "earnings": [
+  {
+   "symbol": "AMD",
+   "accepted_utc": "2026-11-03T21:16:27.000Z"
+  },
+  {
+   "symbol": "SMCI",
+   "accepted_utc": "2026-11-03T21:31:04.000Z"
+  },
+  {
+   "symbol": "CRCL",
+   "accepted_utc": "2026-11-04T11:26:24.000Z"
+  },
+  {
+   "symbol": "BKNG",
+   "accepted_utc": "2026-11-03T21:03:57.000Z"
+  },
+  {
+   "symbol": "ALAB",
+   "accepted_utc": "2026-11-03T21:09:51.000Z"
+  },
+  {
+   "symbol": "UBER",
+   "accepted_utc": "2026-11-04T11:55:39.000Z"
+  },
+  {
+   "symbol": "ANET",
+   "accepted_utc": "2026-11-03T21:10:17.000Z"
+  },
+  {
+   "symbol": "MCD",
+   "accepted_utc": "2026-11-04T12:01:40.000Z"
+  },
+  {
+   "symbol": "DDOG",
+   "accepted_utc": "2026-11-04T12:11:26.000Z"
+  },
+  {
+   "symbol": "AMGN",
+   "accepted_utc": "2026-11-03T21:05:44.000Z"
+  },
+  {
+   "symbol": "CVS",
+   "accepted_utc": "2026-11-04T11:31:50.000Z"
+  },
+  {
+   "symbol": "AIG",
+   "accepted_utc": "2026-11-03T21:24:18.000Z"
+  },
+  {
+   "symbol": "MLM",
+   "accepted_utc": "2026-11-04T12:01:04.000Z"
+  },
+  {
+   "symbol": "MOS",
+   "accepted_utc": "2026-11-03T21:33:53.000Z"
+  },
+  {
+   "symbol": "KHC",
+   "accepted_utc": "2026-11-04T12:00:49.000Z"
+  },
+  {
+   "symbol": "RIOT",
+   "accepted_utc": "2026-11-04T12:30:37.000Z"
+  },
+  {
+   "symbol": "HUT",
+   "accepted_utc": "2026-11-04T11:37:16.000Z"
+  }
+ ],
+ "unknown": [
+  {
+   "symbol": "TSM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NBIS",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ASML",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ARM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "BABA",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NOK",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SPOT",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NU",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "PDD",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NVO",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SHEL",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WBD",
+   "why": "not in SEC's ticker list"
+  },
+  {
+   "symbol": "AEM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WPM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "B",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NTR",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SE",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "GRAB",
+   "why": "files no 8-K (a foreign filer)"
+  }
+ ]
+}
