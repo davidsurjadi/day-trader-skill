@@ -1,0 +1,114 @@
+{
+ "date": "2026-11-04",
+ "decided_at": "2026-11-04 09:50",
+ "hits": 26,
+ "looked": [
+  {
+   "rank": 1,
+   "symbol": "ABNB",
+   "trigger": "9:50 AM",
+   "or_high": 175.54,
+   "or_low": 172.9,
+   "news_items": 4,
+   "news_tags": [
+    "analyst",
+    "earnings"
+   ],
+   "news_error": null,
+   "entry": 176.2,
+   "stop": 174.22,
+   "target": 180.16,
+   "tm_avg_r": -0.079,
+   "tm_target_first": 0.0843,
+   "tm_stop_first": 0.4278,
+   "tm_hist_avg_r": 0.048,
+   "tm_hist_n": 31,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 16 % (target first 8.4 % vs stop first 42.8 %).",
+   "qty": 25,
+   "max_loss": 49.5,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 2,
+   "symbol": "AMD",
+   "trigger": "9:50 AM",
+   "or_high": 508.08,
+   "or_low": 476.5,
+   "news_items": 20,
+   "news_tags": [
+    "analyst",
+    "deal",
+    "earnings",
+    "macro"
+   ],
+   "news_error": null,
+   "entry": 510.15,
+   "stop": 492.29,
+   "target": 545.87,
+   "tm_avg_r": 0.005,
+   "tm_target_first": 0.0006,
+   "tm_stop_first": 0.0884,
+   "tm_hist_avg_r": 0.061,
+   "tm_hist_n": 37,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 1 % (target first 0.1 % vs stop first 8.8 %).",
+   "qty": 2,
+   "max_loss": 35.72,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 3,
+   "symbol": "ANET",
+   "trigger": "9:50 AM",
+   "or_high": 186.83,
+   "or_low": 176.66,
+   "news_items": 20,
+   "news_tags": [
+    "analyst",
+    "deal",
+    "earnings",
+    "macro",
+    "people"
+   ],
+   "news_error": null,
+   "entry": 187.6,
+   "stop": 181.74,
+   "target": 199.32,
+   "tm_avg_r": -0.053,
+   "tm_target_first": 0.0012,
+   "tm_stop_first": 0.1037,
+   "tm_hist_avg_r": -0.137,
+   "tm_hist_n": 27,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 1 % (target first 0.1 % vs stop first 10.4 %).",
+   "qty": 8,
+   "max_loss": 46.88,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  }
+ ],
+ "taken": [
+  "ABNB",
+  "AMD",
+  "ANET"
+ ],
+ "config": {
+  "budget": 10000,
+  "max_order_usd": 7500,
+  "max_position_pct": 75,
+  "max_loss_per_trade_usd": 50,
+  "max_daily_loss_usd": 150,
+  "max_trades_per_day": 3
+ },
+ "costs": {
+  "pct": 0.08,
+  "min": 1.0,
+  "tax_pct": 9.0
+ }
+}
