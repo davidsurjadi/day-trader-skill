@@ -318,6 +318,119 @@
           "earnings"
         ]
       }
+    },
+    {
+      "id": "403988ef319f",
+      "date": "2026-11-04",
+      "symbol": "ABNB",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 25.0,
+      "entry": 176.2,
+      "stop": 174.22,
+      "exit": 175.91,
+      "point_value": 1.0,
+      "risk": 49.5,
+      "gross": -7.25,
+      "costs": 7.68,
+      "net": -14.93,
+      "r_gross": -0.146,
+      "r_net": -0.302,
+      "source": "flow.py",
+      "target": 180.16,
+      "note": "rank 1; entry 176.2 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.079,
+        "tm_hist_avg_r": 0.048,
+        "tm_hist_n": 31,
+        "tm_target_first": 0.0843,
+        "tm_stop_first": 0.4278,
+        "news_items": 4,
+        "news_tags": [
+          "analyst",
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "91079c1b72a0",
+      "date": "2026-11-04",
+      "symbol": "AMD",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 2.0,
+      "entry": 510.15,
+      "stop": 492.29,
+      "exit": 492.29,
+      "point_value": 1.0,
+      "risk": 35.72,
+      "gross": -35.72,
+      "costs": 2.18,
+      "net": -37.9,
+      "r_gross": -1.0,
+      "r_net": -1.061,
+      "source": "flow.py",
+      "target": 545.87,
+      "note": "rank 2; entry 510.15 at the 09:50 decision; stop at 10:20; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": 0.005,
+        "tm_hist_avg_r": 0.061,
+        "tm_hist_n": 37,
+        "tm_target_first": 0.0006,
+        "tm_stop_first": 0.0884,
+        "news_items": 20,
+        "news_tags": [
+          "analyst",
+          "deal",
+          "earnings",
+          "macro"
+        ]
+      }
+    },
+    {
+      "id": "409f5146aad1",
+      "date": "2026-11-04",
+      "symbol": "ANET",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 8.0,
+      "entry": 187.6,
+      "stop": 181.74,
+      "exit": 181.74,
+      "point_value": 1.0,
+      "risk": 46.88,
+      "gross": -46.88,
+      "costs": 2.58,
+      "net": -49.46,
+      "r_gross": -1.0,
+      "r_net": -1.055,
+      "source": "flow.py",
+      "target": 199.32,
+      "note": "rank 3; entry 187.6 at the 09:50 decision; stop at 10:40; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 3,
+        "tm_avg_r": -0.053,
+        "tm_hist_avg_r": -0.137,
+        "tm_hist_n": 27,
+        "tm_target_first": 0.0012,
+        "tm_stop_first": 0.1037,
+        "news_items": 20,
+        "news_tags": [
+          "analyst",
+          "deal",
+          "earnings",
+          "macro",
+          "people"
+        ]
+      }
     }
   ]
 }
