@@ -431,6 +431,113 @@
           "people"
         ]
       }
+    },
+    {
+      "id": "49c83fb04fe4",
+      "date": "2026-11-05",
+      "symbol": "AFL",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 29.0,
+      "entry": 129.28,
+      "stop": 127.56,
+      "exit": 127.56,
+      "point_value": 1.0,
+      "risk": 49.88,
+      "gross": -49.88,
+      "costs": 6.49,
+      "net": -56.37,
+      "r_gross": -1.0,
+      "r_net": -1.13,
+      "source": "flow.py",
+      "target": 132.72,
+      "note": "rank 1; entry 129.28 at the 09:50 decision; stop at 11:40; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.1,
+        "tm_hist_avg_r": 0.012,
+        "tm_hist_n": 27,
+        "tm_target_first": 0.0005,
+        "tm_stop_first": 0.1196,
+        "news_items": 6,
+        "news_tags": [
+          "capital",
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "51158e49af56",
+      "date": "2026-11-05",
+      "symbol": "ALL",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 13.0,
+      "entry": 279.42,
+      "stop": 275.58,
+      "exit": 275.58,
+      "point_value": 1.0,
+      "risk": 49.92,
+      "gross": -49.92,
+      "costs": 6.29,
+      "net": -56.21,
+      "r_gross": -1.0,
+      "r_net": -1.126,
+      "source": "flow.py",
+      "target": 287.1,
+      "note": "rank 2; entry 279.42 at the 09:50 decision; stop at 11:30; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.027,
+        "tm_hist_avg_r": -0.191,
+        "tm_hist_n": 34,
+        "tm_target_first": 0.0132,
+        "tm_stop_first": 0.2051,
+        "news_items": 7,
+        "news_tags": [
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "acd011f9b914",
+      "date": "2026-11-05",
+      "symbol": "QCOM",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 10.0,
+      "entry": 157.77,
+      "stop": 153.29,
+      "exit": 153.29,
+      "point_value": 1.0,
+      "risk": 44.8,
+      "gross": -44.8,
+      "costs": 2.71,
+      "net": -47.51,
+      "r_gross": -1.0,
+      "r_net": -1.06,
+      "source": "flow.py",
+      "target": 166.73,
+      "note": "rank 11; entry 157.77 at the 09:50 decision; stop at 10:35; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 11,
+        "tm_avg_r": 0.046,
+        "tm_hist_avg_r": -0.093,
+        "tm_hist_n": 33,
+        "tm_target_first": 0.0101,
+        "tm_stop_first": 0.1534,
+        "news_items": 19,
+        "news_tags": [
+          "earnings",
+          "macro"
+        ]
+      }
     }
   ]
 }
