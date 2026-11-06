@@ -34,6 +34,11 @@
    "date": "2026-11-05",
    "completed_at": "2026-11-06T06:25:17+08:00",
    "note": "Saxo cross-check skipped: 401, token expired"
+  },
+  {
+   "date": "2026-11-06",
+   "completed_at": "2026-11-07T06:26:42+08:00",
+   "note": "Saxo cross-check skipped: 401, token expired"
   }
  ]
 }
