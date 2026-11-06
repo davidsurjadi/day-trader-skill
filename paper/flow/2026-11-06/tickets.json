@@ -1,0 +1,140 @@
+{
+ "date": "2026-11-06",
+ "decided_at": "2026-11-06 09:50",
+ "hits": 88,
+ "looked": [
+  {
+   "rank": 1,
+   "symbol": "AAOI",
+   "trigger": "9:50 AM",
+   "or_high": 49.48,
+   "or_low": 45.15,
+   "news_items": 9,
+   "news_tags": [
+    "deal",
+    "earnings"
+   ],
+   "news_error": null,
+   "entry": 51.04,
+   "stop": 47.31,
+   "target": 58.5,
+   "tm_avg_r": -0.088,
+   "tm_target_first": 0.0012,
+   "tm_stop_first": 0.0926,
+   "tm_hist_avg_r": -0.173,
+   "tm_hist_n": 32,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 1 % (target first 0.1 % vs stop first 9.3 %).",
+   "qty": 13,
+   "max_loss": 48.49,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 2,
+   "symbol": "AMD",
+   "trigger": "9:50 AM",
+   "or_high": 453.64,
+   "or_low": 433.93,
+   "news_items": 19,
+   "news_tags": [
+    "analyst",
+    "capital",
+    "deal",
+    "earnings",
+    "macro"
+   ],
+   "news_error": null,
+   "decision": "blocked",
+   "reason": "news: offering"
+  },
+  {
+   "rank": 3,
+   "symbol": "AMGN",
+   "trigger": "9:50 AM",
+   "or_high": 454.97,
+   "or_low": 447.49,
+   "news_items": 5,
+   "news_tags": [
+    "capital",
+    "earnings"
+   ],
+   "news_error": null,
+   "entry": 456.93,
+   "stop": 451.0,
+   "target": 468.79,
+   "tm_avg_r": -0.031,
+   "tm_target_first": 0.0258,
+   "tm_stop_first": 0.2837,
+   "tm_hist_avg_r": 0.124,
+   "tm_hist_n": 31,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 8 % (target first 2.6 % vs stop first 28.4 %).",
+   "qty": 8,
+   "max_loss": 47.44,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 4,
+   "symbol": "APD",
+   "trigger": "9:50 AM",
+   "or_high": 304.32,
+   "or_low": 301.16,
+   "news_items": 4,
+   "news_tags": [
+    "capital",
+    "earnings",
+    "macro"
+   ],
+   "news_error": null,
+   "decision": "blocked",
+   "reason": "news: offering"
+  },
+  {
+   "rank": 5,
+   "symbol": "AXTI",
+   "trigger": "9:50 AM",
+   "or_high": 40.01,
+   "or_low": 37.58,
+   "news_items": 0,
+   "news_tags": [],
+   "news_error": null,
+   "entry": 40.08,
+   "stop": 38.79,
+   "target": 42.66,
+   "tm_avg_r": -0.105,
+   "tm_target_first": 0.1548,
+   "tm_stop_first": 0.5343,
+   "tm_hist_avg_r": 0.093,
+   "tm_hist_n": 23,
+   "tm_verdict": "Leans toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 22 % (target first 15.5 % vs stop first 53.4 %).",
+   "qty": 38,
+   "max_loss": 49.02,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  }
+ ],
+ "taken": [
+  "AAOI",
+  "AMGN",
+  "AXTI"
+ ],
+ "config": {
+  "budget": 10000,
+  "max_order_usd": 7500,
+  "max_position_pct": 75,
+  "max_loss_per_trade_usd": 50,
+  "max_daily_loss_usd": 150,
+  "max_trades_per_day": 3
+ },
+ "costs": {
+  "pct": 0.08,
+  "min": 1.0,
+  "tax_pct": 9.0
+ }
+}
