@@ -538,6 +538,111 @@
           "macro"
         ]
       }
+    },
+    {
+      "id": "945e57d7a2d5",
+      "date": "2026-11-06",
+      "symbol": "AAOI",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 13.0,
+      "entry": 51.04,
+      "stop": 47.31,
+      "exit": 47.31,
+      "point_value": 1.0,
+      "risk": 48.49,
+      "gross": -48.49,
+      "costs": 2.18,
+      "net": -50.67,
+      "r_gross": -1.0,
+      "r_net": -1.045,
+      "source": "flow.py",
+      "target": 58.5,
+      "note": "rank 1; entry 51.04 at the 09:50 decision; stop at 10:30; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.088,
+        "tm_hist_avg_r": -0.173,
+        "tm_hist_n": 32,
+        "tm_target_first": 0.0012,
+        "tm_stop_first": 0.0926,
+        "news_items": 9,
+        "news_tags": [
+          "deal",
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "8ba15e88f449",
+      "date": "2026-11-06",
+      "symbol": "AMGN",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 8.0,
+      "entry": 456.93,
+      "stop": 451.0,
+      "exit": 460.25,
+      "point_value": 1.0,
+      "risk": 47.44,
+      "gross": 26.56,
+      "costs": 6.4,
+      "net": 20.16,
+      "r_gross": 0.56,
+      "r_net": 0.425,
+      "source": "flow.py",
+      "target": 468.79,
+      "note": "rank 3; entry 456.93 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 3,
+        "tm_avg_r": -0.031,
+        "tm_hist_avg_r": 0.124,
+        "tm_hist_n": 31,
+        "tm_target_first": 0.0258,
+        "tm_stop_first": 0.2837,
+        "news_items": 5,
+        "news_tags": [
+          "capital",
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "6f3bafd61973",
+      "date": "2026-11-06",
+      "symbol": "AXTI",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 38.0,
+      "entry": 40.08,
+      "stop": 38.79,
+      "exit": 38.79,
+      "point_value": 1.0,
+      "risk": 49.02,
+      "gross": -49.02,
+      "costs": 2.61,
+      "net": -51.63,
+      "r_gross": -1.0,
+      "r_net": -1.053,
+      "source": "flow.py",
+      "target": 42.66,
+      "note": "rank 5; entry 40.08 at the 09:50 decision; stop at 09:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 5,
+        "tm_avg_r": -0.105,
+        "tm_hist_avg_r": 0.093,
+        "tm_hist_n": 23,
+        "tm_target_first": 0.1548,
+        "tm_stop_first": 0.5343,
+        "news_items": 0,
+        "news_tags": []
+      }
     }
   ]
 }
