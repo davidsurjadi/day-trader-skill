@@ -643,6 +643,110 @@
         "news_items": 0,
         "news_tags": []
       }
+    },
+    {
+      "id": "d5ddc9e851e0",
+      "date": "2026-11-09",
+      "symbol": "AAOI",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 19.0,
+      "entry": 52.43,
+      "stop": 49.9,
+      "exit": 52.12,
+      "point_value": 1.0,
+      "risk": 48.07,
+      "gross": -5.89,
+      "costs": 2.18,
+      "net": -8.07,
+      "r_gross": -0.123,
+      "r_net": -0.168,
+      "source": "flow.py",
+      "target": 57.49,
+      "note": "rank 1; entry 52.43 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.121,
+        "tm_hist_avg_r": -0.228,
+        "tm_hist_n": 32,
+        "tm_target_first": 0.0209,
+        "tm_stop_first": 0.3008,
+        "news_items": 1,
+        "news_tags": [
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "262f7c7280a2",
+      "date": "2026-11-09",
+      "symbol": "ADI",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 7.0,
+      "entry": 379.62,
+      "stop": 372.81,
+      "exit": 393.24,
+      "point_value": 1.0,
+      "risk": 47.67,
+      "gross": 95.34,
+      "costs": 4.72,
+      "net": 90.62,
+      "r_gross": 2.0,
+      "r_net": 1.901,
+      "source": "flow.py",
+      "target": 393.24,
+      "note": "rank 2; entry 379.62 at the 09:50 decision; target at 14:40; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.006,
+        "tm_hist_avg_r": 0.123,
+        "tm_hist_n": 32,
+        "tm_target_first": 0.0378,
+        "tm_stop_first": 0.3144,
+        "news_items": 4,
+        "news_tags": [
+          "deal",
+          "earnings"
+        ]
+      }
+    },
+    {
+      "id": "c176195f7f6a",
+      "date": "2026-11-09",
+      "symbol": "ALAB",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 6.0,
+      "entry": 207.78,
+      "stop": 199.95,
+      "exit": 216.07,
+      "point_value": 1.0,
+      "risk": 46.98,
+      "gross": 49.74,
+      "costs": 2.22,
+      "net": 47.52,
+      "r_gross": 1.059,
+      "r_net": 1.011,
+      "source": "flow.py",
+      "target": 223.44,
+      "note": "rank 3; entry 207.78 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 3,
+        "tm_avg_r": -0.051,
+        "tm_hist_avg_r": -0.097,
+        "tm_hist_n": 34,
+        "tm_target_first": 0.0427,
+        "tm_stop_first": 0.3475,
+        "news_items": 0,
+        "news_tags": []
+      }
     }
   ]
 }
