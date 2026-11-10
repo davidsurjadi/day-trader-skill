@@ -1,0 +1,113 @@
+{
+ "date": "2026-11-10",
+ "source": "SEC EDGAR submissions, 8-K item 2.02",
+ "read_at": "2026-11-10T21:13:14+00:00",
+ "earnings": [
+  {
+   "symbol": "RKLB",
+   "accepted_utc": "2026-11-09T21:06:21.000Z"
+  },
+  {
+   "symbol": "ASTS",
+   "accepted_utc": "2026-11-09T21:49:10.000Z"
+  },
+  {
+   "symbol": "OXY",
+   "accepted_utc": "2026-11-09T21:13:54.000Z"
+  },
+  {
+   "symbol": "HIMS",
+   "accepted_utc": "2026-11-09T21:11:11.000Z"
+  },
+  {
+   "symbol": "MARA",
+   "accepted_utc": "2026-11-09T21:05:10.000Z"
+  },
+  {
+   "symbol": "PLUG",
+   "accepted_utc": "2026-11-09T21:07:21.000Z"
+  },
+  {
+   "symbol": "TTWO",
+   "accepted_utc": "2026-11-09T21:10:58.000Z"
+  },
+  {
+   "symbol": "LCID",
+   "accepted_utc": "2026-11-09T21:08:17.000Z"
+  }
+ ],
+ "unknown": [
+  {
+   "symbol": "TSM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NBIS",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ASML",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ARM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "BABA",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NOK",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SPOT",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NU",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "PDD",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NVO",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SHEL",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WBD",
+   "why": "not in SEC's ticker list"
+  },
+  {
+   "symbol": "AEM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WPM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "B",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NTR",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SE",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "GRAB",
+   "why": "files no 8-K (a foreign filer)"
+  }
+ ]
+}
