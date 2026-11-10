@@ -223,6 +223,38 @@
         "rvol": 2.421,
         "prior_sessions": 20
       }
+    },
+    {
+      "id": "09db3acf3323",
+      "date": "2026-11-10",
+      "symbol": "NAS100",
+      "setup": "orb15-mid-2R",
+      "asset_class": "index_cfd",
+      "account": "paper",
+      "side": "long",
+      "qty": 1.0,
+      "entry": 27782.98,
+      "stop": 27649.79,
+      "exit": 27649.79,
+      "point_value": 1.0,
+      "risk": 133.19,
+      "gross": -133.19,
+      "costs": 1.0,
+      "net": -134.19,
+      "r_gross": -1.0,
+      "r_net": -1.008,
+      "source": "paper.py",
+      "target": 28049.36,
+      "note": "yahoo:^NDX; entry 09:50, stop at 10:50; range 27541.00-27758.59",
+      "tags": {
+        "entry_time": "09:50",
+        "exit_time": "10:50",
+        "exit_by": "stop",
+        "stop_pct": 0.479,
+        "or_width_ratio": 1.202,
+        "rvol": 1.604,
+        "prior_sessions": 20
+      }
     }
   ]
 }
