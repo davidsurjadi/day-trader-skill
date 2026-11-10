@@ -747,6 +747,114 @@
         "news_items": 0,
         "news_tags": []
       }
+    },
+    {
+      "id": "0ecc801bcf03",
+      "date": "2026-11-10",
+      "symbol": "AVGO",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 10.0,
+      "entry": 325.62,
+      "stop": 320.76,
+      "exit": 320.76,
+      "point_value": 1.0,
+      "risk": 48.6,
+      "gross": -48.6,
+      "costs": 5.64,
+      "net": -54.24,
+      "r_gross": -1.0,
+      "r_net": -1.116,
+      "source": "flow.py",
+      "target": 335.34,
+      "note": "rank 1; entry 325.62 at the 09:50 decision; stop at 13:00; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.119,
+        "tm_hist_avg_r": 0.017,
+        "tm_hist_n": 29,
+        "tm_target_first": 0.0384,
+        "tm_stop_first": 0.373,
+        "news_items": 18,
+        "news_tags": [
+          "analyst",
+          "earnings",
+          "legal",
+          "macro"
+        ]
+      }
+    },
+    {
+      "id": "fea012c66f08",
+      "date": "2026-11-10",
+      "symbol": "COP",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 23.0,
+      "entry": 134.39,
+      "stop": 132.26,
+      "exit": 135.63,
+      "point_value": 1.0,
+      "risk": 48.99,
+      "gross": 28.52,
+      "costs": 5.42,
+      "net": 23.1,
+      "r_gross": 0.582,
+      "r_net": 0.472,
+      "source": "flow.py",
+      "target": 138.65,
+      "note": "rank 2; entry 134.39 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.06,
+        "tm_hist_avg_r": -0.082,
+        "tm_hist_n": 37,
+        "tm_target_first": 0.0101,
+        "tm_stop_first": 0.2054,
+        "news_items": 4,
+        "news_tags": [
+          "capital"
+        ]
+      }
+    },
+    {
+      "id": "d09e83e237b4",
+      "date": "2026-11-10",
+      "symbol": "CRWD",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 11.0,
+      "entry": 225.97,
+      "stop": 222.09,
+      "exit": 222.09,
+      "point_value": 1.0,
+      "risk": 42.68,
+      "gross": -42.68,
+      "costs": 4.3,
+      "net": -46.98,
+      "r_gross": -1.0,
+      "r_net": -1.101,
+      "source": "flow.py",
+      "target": 233.73,
+      "note": "rank 3; entry 225.97 at the 09:50 decision; stop at 12:20; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 3,
+        "tm_avg_r": 0.051,
+        "tm_hist_avg_r": 0.239,
+        "tm_hist_n": 30,
+        "tm_target_first": 0.1566,
+        "tm_stop_first": 0.458,
+        "news_items": 5,
+        "news_tags": [
+          "earnings"
+        ]
+      }
     }
   ]
 }
