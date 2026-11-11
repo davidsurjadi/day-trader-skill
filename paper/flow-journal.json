@@ -855,6 +855,80 @@
           "earnings"
         ]
       }
+    },
+    {
+      "id": "68b1d033e88e",
+      "date": "2026-11-11",
+      "symbol": "AAPL",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 21.0,
+      "entry": 353.68,
+      "stop": 351.38,
+      "exit": 355.4,
+      "point_value": 1.0,
+      "risk": 48.3,
+      "gross": 36.12,
+      "costs": 12.98,
+      "net": 23.14,
+      "r_gross": 0.748,
+      "r_net": 0.479,
+      "source": "flow.py",
+      "target": 358.28,
+      "note": "rank 1; entry 353.68 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": 0.133,
+        "tm_hist_avg_r": 0.294,
+        "tm_hist_n": 31,
+        "tm_target_first": 0.2432,
+        "tm_stop_first": 0.4782,
+        "news_items": 20,
+        "news_tags": [
+          "analyst",
+          "deal",
+          "earnings",
+          "macro",
+          "people"
+        ]
+      }
+    },
+    {
+      "id": "01c5cef17b25",
+      "date": "2026-11-11",
+      "symbol": "CHTR",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 11.0,
+      "entry": 134.89,
+      "stop": 132.12,
+      "exit": 132.12,
+      "point_value": 1.0,
+      "risk": 30.47,
+      "gross": -30.47,
+      "costs": 2.56,
+      "net": -33.03,
+      "r_gross": -1.0,
+      "r_net": -1.084,
+      "source": "flow.py",
+      "target": 140.43,
+      "note": "rank 6; entry 134.89 at the 09:50 decision; stop at 10:15; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 6,
+        "tm_avg_r": 0.052,
+        "tm_hist_avg_r": -0.126,
+        "tm_hist_n": 34,
+        "tm_target_first": 0.1255,
+        "tm_stop_first": 0.3967,
+        "news_items": 4,
+        "news_tags": [
+          "macro"
+        ]
+      }
     }
   ]
 }
