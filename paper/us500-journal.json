@@ -287,6 +287,38 @@
         "rvol": 0.684,
         "prior_sessions": 20
       }
+    },
+    {
+      "id": "e4cb7b345d9b",
+      "date": "2026-11-11",
+      "symbol": "US500",
+      "setup": "orb15-mid-2R",
+      "asset_class": "index_cfd",
+      "account": "paper",
+      "side": "long",
+      "qty": 1.0,
+      "entry": 7609.91,
+      "stop": 7591.28,
+      "exit": 7647.17,
+      "point_value": 1.0,
+      "risk": 18.63,
+      "gross": 37.26,
+      "costs": 0.6,
+      "net": 36.66,
+      "r_gross": 2.0,
+      "r_net": 1.968,
+      "source": "paper.py",
+      "target": 7647.17,
+      "note": "yahoo:^GSPC; entry 10:55, target at 13:45; range 7579.04-7603.52",
+      "tags": {
+        "entry_time": "10:55",
+        "exit_time": "13:45",
+        "exit_by": "target",
+        "stop_pct": 0.245,
+        "or_width_ratio": 0.875,
+        "rvol": 0.693,
+        "prior_sessions": 20
+      }
     }
   ]
 }
