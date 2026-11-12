@@ -1,0 +1,85 @@
+{
+ "date": "2026-11-12",
+ "source": "SEC EDGAR submissions, 8-K item 2.02",
+ "read_at": "2026-11-12T21:13:18+00:00",
+ "earnings": [
+  {
+   "symbol": "ONDS",
+   "accepted_utc": "2026-11-12T13:24:42.000Z"
+  }
+ ],
+ "unknown": [
+  {
+   "symbol": "TSM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NBIS",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ASML",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "ARM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "BABA",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NOK",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SPOT",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NU",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "PDD",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NVO",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SHEL",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WBD",
+   "why": "not in SEC's ticker list"
+  },
+  {
+   "symbol": "AEM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "WPM",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "B",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "NTR",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "SE",
+   "why": "files no 8-K (a foreign filer)"
+  },
+  {
+   "symbol": "GRAB",
+   "why": "files no 8-K (a foreign filer)"
+  }
+ ]
+}
