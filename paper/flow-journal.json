@@ -1133,6 +1133,74 @@
         "news_items": 0,
         "news_tags": []
       }
+    },
+    {
+      "id": "ee6d9f32d501",
+      "date": "2026-11-17",
+      "symbol": "AAL",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 357.0,
+      "entry": 13.28,
+      "stop": 13.14,
+      "exit": 13.14,
+      "point_value": 1.0,
+      "risk": 49.98,
+      "gross": -49.98,
+      "costs": 8.22,
+      "net": -58.2,
+      "r_gross": -1.0,
+      "r_net": -1.164,
+      "source": "flow.py",
+      "target": 13.56,
+      "note": "rank 1; entry 13.28 at the 09:50 decision; stop at 10:15; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": -0.077,
+        "tm_hist_avg_r": -0.003,
+        "tm_hist_n": 34,
+        "tm_target_first": 0.2129,
+        "tm_stop_first": 0.5939,
+        "news_items": 1,
+        "news_tags": [
+          "risk"
+        ]
+      }
+    },
+    {
+      "id": "b4b247f12013",
+      "date": "2026-11-17",
+      "symbol": "ADI",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 10.0,
+      "entry": 391.15,
+      "stop": 387.45,
+      "exit": 387.45,
+      "point_value": 1.0,
+      "risk": 37.0,
+      "gross": -37.0,
+      "costs": 6.79,
+      "net": -43.79,
+      "r_gross": -1.0,
+      "r_net": -1.184,
+      "source": "flow.py",
+      "target": 398.55,
+      "note": "rank 2; entry 391.15 at the 09:50 decision; stop at 10:30; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.059,
+        "tm_hist_avg_r": 0.194,
+        "tm_hist_n": 34,
+        "tm_target_first": 0.2344,
+        "tm_stop_first": 0.6163,
+        "news_items": 2,
+        "news_tags": []
+      }
     }
   ]
 }
