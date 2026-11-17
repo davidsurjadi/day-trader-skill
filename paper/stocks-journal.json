@@ -3903,6 +3903,70 @@
         "rvol": 1.256,
         "prior_sessions": 20
       }
+    },
+    {
+      "id": "05b825e2499a",
+      "date": "2026-11-17",
+      "symbol": "AAPL",
+      "setup": "orb15-mid-2R",
+      "asset_class": "us_stock",
+      "account": "paper",
+      "side": "long",
+      "qty": 10.0,
+      "entry": 354.68,
+      "stop": 352.67,
+      "exit": 352.67,
+      "point_value": 1.0,
+      "risk": 20.1,
+      "gross": -20.1,
+      "costs": 6.17,
+      "net": -26.27,
+      "r_gross": -1.0,
+      "r_net": -1.307,
+      "source": "paper.py",
+      "target": 358.7,
+      "note": "yahoo:AAPL; entry 09:50, stop at 10:40; range 351.81-353.55",
+      "tags": {
+        "entry_time": "09:50",
+        "exit_time": "10:40",
+        "exit_by": "stop",
+        "stop_pct": 0.567,
+        "or_width_ratio": 0.433,
+        "rvol": 1.309,
+        "prior_sessions": 20
+      }
+    },
+    {
+      "id": "2b218591f6a0",
+      "date": "2026-11-17",
+      "symbol": "AMZN",
+      "setup": "orb15-mid-2R",
+      "asset_class": "us_stock",
+      "account": "paper",
+      "side": "long",
+      "qty": 14.0,
+      "entry": 259.26,
+      "stop": 258.16,
+      "exit": 258.16,
+      "point_value": 1.0,
+      "risk": 15.4,
+      "gross": -15.4,
+      "costs": 6.32,
+      "net": -21.72,
+      "r_gross": -1.0,
+      "r_net": -1.41,
+      "source": "paper.py",
+      "target": 261.46,
+      "note": "yahoo:AMZN; entry 09:55, stop at 10:30; range 257.35-258.98",
+      "tags": {
+        "entry_time": "09:55",
+        "exit_time": "10:30",
+        "exit_by": "stop",
+        "stop_pct": 0.424,
+        "or_width_ratio": 0.338,
+        "rvol": 0.603,
+        "prior_sessions": 20
+      }
     }
   ]
 }
