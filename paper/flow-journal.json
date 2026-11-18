@@ -1201,6 +1201,112 @@
         "news_items": 2,
         "news_tags": []
       }
+    },
+    {
+      "id": "b2eb1ad416a0",
+      "date": "2026-11-18",
+      "symbol": "CMG",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 65.0,
+      "entry": 36.53,
+      "stop": 35.77,
+      "exit": 37.05,
+      "point_value": 1.0,
+      "risk": 49.4,
+      "gross": 33.8,
+      "costs": 4.17,
+      "net": 29.63,
+      "r_gross": 0.684,
+      "r_net": 0.6,
+      "source": "flow.py",
+      "target": 38.05,
+      "note": "rank 1; entry 36.53 at the 09:50 decision; flat at 15:50; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 1,
+        "tm_avg_r": 0.043,
+        "tm_hist_avg_r": 0.061,
+        "tm_hist_n": 27,
+        "tm_target_first": 0.0271,
+        "tm_stop_first": 0.1772,
+        "news_items": 3,
+        "news_tags": []
+      }
+    },
+    {
+      "id": "3be1f8262bdd",
+      "date": "2026-11-18",
+      "symbol": "DASH",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 22.0,
+      "entry": 168.62,
+      "stop": 166.38,
+      "exit": 166.38,
+      "point_value": 1.0,
+      "risk": 49.28,
+      "gross": -49.28,
+      "costs": 6.43,
+      "net": -55.71,
+      "r_gross": -1.0,
+      "r_net": -1.13,
+      "source": "flow.py",
+      "target": 173.1,
+      "note": "rank 2; entry 168.62 at the 09:50 decision; stop at 10:35; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 2,
+        "tm_avg_r": -0.041,
+        "tm_hist_avg_r": 0.062,
+        "tm_hist_n": 25,
+        "tm_target_first": 0.204,
+        "tm_stop_first": 0.5662,
+        "news_items": 5,
+        "news_tags": [
+          "deal",
+          "legal"
+        ]
+      }
+    },
+    {
+      "id": "990e0d1b73f0",
+      "date": "2026-11-18",
+      "symbol": "DIS",
+      "setup": "full-flow-orb",
+      "asset_class": "us_stock",
+      "account": "paper-flow",
+      "side": "long",
+      "qty": 24.0,
+      "entry": 119.1,
+      "stop": 117.81,
+      "exit": 121.68,
+      "point_value": 1.0,
+      "risk": 30.96,
+      "gross": 61.92,
+      "costs": 5.04,
+      "net": 56.88,
+      "r_gross": 2.0,
+      "r_net": 1.837,
+      "source": "flow.py",
+      "target": 121.68,
+      "note": "rank 3; entry 119.1 at the 09:50 decision; target at 12:20; approved by standing instruction (paper)",
+      "tags": {
+        "rank": 3,
+        "tm_avg_r": -0.04,
+        "tm_hist_avg_r": -0.038,
+        "tm_hist_n": 39,
+        "tm_target_first": 0.0312,
+        "tm_stop_first": 0.2909,
+        "news_items": 12,
+        "news_tags": [
+          "capital",
+          "earnings",
+          "legal"
+        ]
+      }
     }
   ]
 }
