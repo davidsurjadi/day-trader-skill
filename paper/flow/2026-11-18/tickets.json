@@ -1,0 +1,107 @@
+{
+ "date": "2026-11-18",
+ "decided_at": "2026-11-18 09:50",
+ "hits": 5,
+ "looked": [
+  {
+   "rank": 1,
+   "symbol": "CMG",
+   "trigger": "9:50 AM",
+   "or_high": 36.47,
+   "or_low": 35.08,
+   "news_items": 3,
+   "news_tags": [],
+   "news_error": null,
+   "entry": 36.53,
+   "stop": 35.77,
+   "target": 38.05,
+   "tm_avg_r": 0.043,
+   "tm_target_first": 0.0271,
+   "tm_stop_first": 0.1772,
+   "tm_hist_avg_r": 0.061,
+   "tm_hist_n": 27,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 13 % (target first 2.7 % vs stop first 17.7 %).",
+   "qty": 65,
+   "max_loss": 49.4,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 2,
+   "symbol": "DASH",
+   "trigger": "9:50 AM",
+   "or_high": 168.36,
+   "or_low": 164.4,
+   "news_items": 5,
+   "news_tags": [
+    "deal",
+    "legal"
+   ],
+   "news_error": null,
+   "entry": 168.62,
+   "stop": 166.38,
+   "target": 173.1,
+   "tm_avg_r": -0.041,
+   "tm_target_first": 0.204,
+   "tm_stop_first": 0.5662,
+   "tm_hist_avg_r": 0.062,
+   "tm_hist_n": 25,
+   "tm_verdict": "Leans toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 26 % (target first 20.4 % vs stop first 56.6 %).",
+   "qty": 22,
+   "max_loss": 49.28,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  },
+  {
+   "rank": 3,
+   "symbol": "DIS",
+   "trigger": "9:50 AM",
+   "or_high": 118.98,
+   "or_low": 116.65,
+   "news_items": 12,
+   "news_tags": [
+    "capital",
+    "earnings",
+    "legal"
+   ],
+   "news_error": null,
+   "entry": 119.1,
+   "stop": 117.81,
+   "target": 121.68,
+   "tm_avg_r": -0.04,
+   "tm_target_first": 0.0312,
+   "tm_stop_first": 0.2909,
+   "tm_hist_avg_r": -0.038,
+   "tm_hist_n": 39,
+   "tm_verdict": "Strongly toward the stop: at 2R the target has to come first in 33 % of the replays that hit one side; it did in 10 % (target first 3.1 % vs stop first 29.1 %).",
+   "qty": 24,
+   "max_loss": 30.96,
+   "risk_verdict": "PASS",
+   "risk_reasons": [],
+   "decision": "taken",
+   "approval": "standing instruction (paper), not a typed yes"
+  }
+ ],
+ "taken": [
+  "CMG",
+  "DASH",
+  "DIS"
+ ],
+ "config": {
+  "budget": 10000,
+  "max_order_usd": 7500,
+  "max_position_pct": 75,
+  "max_loss_per_trade_usd": 50,
+  "max_daily_loss_usd": 150,
+  "max_trades_per_day": 3
+ },
+ "costs": {
+  "pct": 0.08,
+  "min": 1.0,
+  "tax_pct": 9.0
+ }
+}
